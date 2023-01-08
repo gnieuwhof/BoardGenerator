@@ -34,7 +34,7 @@
             // logTxt
             // 
             this.logTxt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logTxt.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.logTxt.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.logTxt.Location = new System.Drawing.Point(0, 0);
             this.logTxt.Multiline = true;
             this.logTxt.Name = "logTxt";
@@ -51,6 +51,7 @@
             this.Controls.Add(this.logTxt);
             this.Name = "LogFrm";
             this.Text = "Board Generator Log";
+            this.Shown += new System.EventHandler(this.LogFrm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -2,97 +2,37 @@
 {
     using BoardGenerator.Conf;
     using Newtonsoft.Json;
-    using System.Text;
 
     internal static class Config
     {
-        public static bool TryLoadConfiguration(out Configuration config)
+        public static Configuration Deserialize(string json)
         {
-            try
-            {
-                using (var openFileDialog = new OpenFileDialog())
-                {
-                    openFileDialog.Filter = "JSON Configuration (*.json)|*.json";
-                    openFileDialog.RestoreDirectory = true;
+            Configuration config = JsonConvert
+                .DeserializeObject<Configuration>(json);
 
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string filePath = openFileDialog.FileName;
-
-                        Stream fileStream = openFileDialog.OpenFile();
-
-                        string fileContent;
-                        using (var reader = new StreamReader(fileStream))
-                        {
-                            fileContent = reader.ReadToEnd();
-                        }
-
-                        config = JsonConvert.DeserializeObject<Configuration>(fileContent);
-
-                        Logging.Log($"Loaded configuration file: {filePath}");
-
-                        return true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.Log("An error occurred while loading configuration");
-                Logging.Log($"{ex}");
-            }
-
-            config = null;
-            return false;
+            return config;
         }
 
-        public static bool SaveConfiguration(Configuration config)
+        public static string Serialize(Configuration config)
         {
-            try
+            var settings = new JsonSerializerSettings
             {
-                var sfd = new SaveFileDialog();
-                sfd.Filter = "JSON Configuration|*.json";
-                sfd.Title = "Save a Configuration File";
-                sfd.ShowDialog();
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
+            };
 
-                if (sfd.FileName != "")
-                {
-                    var fs = (System.IO.FileStream)sfd.OpenFile();
+            string json = JsonConvert.SerializeObject(config, settings);
 
-                    var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented,
-                        NullValueHandling = NullValueHandling.Ignore,
-                    };
-
-                    string json = JsonConvert.SerializeObject(config, settings);
-
-                    byte[] bytes = Encoding.UTF8.GetBytes(json);
-
-                    fs.Write(bytes, 0, bytes.Length);
-
-                    fs.Close();
-
-                    Logging.Log($"Configuration saved to: {sfd.FileName}");
-
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.Log("An error occurred while saving configuration");
-                Logging.Log($"{ex}");
-                return false;
-            }
-
-            Logging.Log("Saving configuration was cancelled");
-
-            return false;
+            return json;
         }
 
         public static Rectangle GetBounds(Configuration config)
         {
             _ = config ??
                 throw new ArgumentNullException(nameof(config));
+
+            Logging.EnsureEmptyLine();
+            Logging.Log("Getting Bounds");
 
             int left = 0;
             int top = 0;
@@ -103,31 +43,38 @@
             {
                 foreach (Area area in config.Areas)
                 {
-                    if(area.X < left)
+                    if (area.X < left)
                     {
                         left = area.X;
                     }
-                    if(area.Y < top)
+                    if (area.Y < top)
                     {
                         top = area.Y;
                     }
 
                     int areaRight = area.X + area.Width;
-                    if(areaRight > right)
+                    if (areaRight > right)
                     {
                         right = areaRight;
                     }
 
                     int areaBottom = area.Y + area.Height;
-                    if(areaBottom > bottom)
+                    if (areaBottom > bottom)
                     {
                         bottom = areaBottom;
                     }
                 }
             }
+            else
+            {
+                Logging.LogWithEmptyLine("WARN: No areas found in config");
+            }
 
             int width = right - left;
             int height = bottom - top;
+
+            Logging.LogWithEmptyLine(
+                $"Bounds (left:{left}, top:{top}, right:{right}, bottom:{bottom})");
 
             var result = new Rectangle(left, top, width, height);
 
@@ -185,7 +132,7 @@
                 Areas = new[] { area1, area2, area3, area4 }
             };
 
-            Logging.Log("Example configuration created");
+            Logging.LogWithEmptyLine("Example configuration created");
 
             return config;
         }

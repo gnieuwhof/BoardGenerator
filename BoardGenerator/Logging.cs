@@ -17,6 +17,20 @@
 
             last = message;
 
+            if (message != "")
+            {
+                string timestamp = DateTime.Now.ToString("HH:mm:ss");
+
+                if (message.Contains("\n"))
+                {
+                    sb.AppendLine($"[{timestamp}]");
+                }
+                else
+                {
+                    message = $"[{timestamp}] {message}";
+                }
+            }
+
             sb.AppendLine(message);
 
             if (logFrm != null)
@@ -25,7 +39,13 @@
             }
         }
 
-        public static void Empty()
+        public static void LogWithEmptyLine(string message = "")
+        {
+            Log(message);
+            Log();
+        }
+
+        public static void EnsureEmptyLine()
         {
             if (last != "")
             {
