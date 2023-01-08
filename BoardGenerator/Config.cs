@@ -81,7 +81,10 @@
             {
                 Logging.Log("An error occurred while saving configuration");
                 Logging.Log($"{ex}");
+                return false;
             }
+
+            Logging.Log("Saving configuration was cancelled");
 
             return false;
         }

@@ -4,6 +4,9 @@ namespace BoardGenerator
 {
     public partial class BoardGeneratorFrm : Form
     {
+        private LogFrm logFrm;
+
+
         public BoardGeneratorFrm()
         {
             InitializeComponent();
@@ -17,6 +20,9 @@ namespace BoardGenerator
 
         private void SetStatus(string status)
         {
+            Logging.Log($"Status updated to: {status}");
+            Logging.Empty();
+
             string timestamp = DateTime.Now.ToString("HH:mm:ss");
 
             this.toolStripStatusLabel.Text = $"[{timestamp}] {status}";
@@ -24,9 +30,11 @@ namespace BoardGenerator
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Logging.Empty();
+
             bool success = Config.TryLoadConfiguration(out Configuration config);
 
-            if(success)
+            if (success)
             {
                 this.SetStatus("Configuration loaded");
                 var _ = config;
@@ -39,6 +47,8 @@ namespace BoardGenerator
 
         private void createExampleToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Logging.Empty();
+
             var example = Config.CreateExample();
 
             bool success = Config.SaveConfiguration(example);
@@ -51,6 +61,18 @@ namespace BoardGenerator
             {
                 this.SetStatus("Creating example configuration was cancelled");
             }
+        }
+
+        private void logToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((logFrm == null) || (logFrm.IsDisposed))
+            {
+                logFrm = new LogFrm();
+
+                Logging.SetLogFrm(logFrm);
+            }
+
+            logFrm.Show();
         }
     }
 }
