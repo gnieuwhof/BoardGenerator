@@ -37,7 +37,9 @@ namespace BoardGenerator
             if (success)
             {
                 this.SetStatus("Configuration loaded");
-                var _ = config;
+
+                var bounds = Config.GetBounds(config);
+                Logging.Log($"Bounds: L:{bounds.X} T:{bounds.Y} R:{bounds.Right} B:{bounds.Bottom}");
             }
             else
             {

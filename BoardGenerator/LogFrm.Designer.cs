@@ -34,6 +34,7 @@
             // logTxt
             // 
             this.logTxt.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logTxt.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.logTxt.Location = new System.Drawing.Point(0, 0);
             this.logTxt.Multiline = true;
             this.logTxt.Name = "logTxt";

@@ -89,6 +89,51 @@
             return false;
         }
 
+        public static Rectangle GetBounds(Configuration config)
+        {
+            _ = config ??
+                throw new ArgumentNullException(nameof(config));
+
+            int left = 0;
+            int top = 0;
+            int right = 0;
+            int bottom = 0;
+
+            if (config.Areas != null)
+            {
+                foreach (Area area in config.Areas)
+                {
+                    if(area.X < left)
+                    {
+                        left = area.X;
+                    }
+                    if(area.Y < top)
+                    {
+                        top = area.Y;
+                    }
+
+                    int areaRight = area.X + area.Width;
+                    if(areaRight > right)
+                    {
+                        right = areaRight;
+                    }
+
+                    int areaBottom = area.Y + area.Height;
+                    if(areaBottom > bottom)
+                    {
+                        bottom = areaBottom;
+                    }
+                }
+            }
+
+            int width = right - left;
+            int height = bottom - top;
+
+            var result = new Rectangle(left, top, width, height);
+
+            return result;
+        }
+
         public static Configuration CreateExample()
         {
             var area1 = new Area
