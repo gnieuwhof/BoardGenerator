@@ -1,6 +1,6 @@
 ﻿namespace BoardGenerator.Conf
 {
-    internal class Area
+    public class Area
     {
         public string Name { get; set; }
 

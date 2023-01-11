@@ -13,6 +13,9 @@ namespace BoardGenerator
         }
 
 
+        public string ConfigFilePath { get; set; }
+
+
         private void BoardGeneratorFrm_Load(object sender, EventArgs e)
         {
             this.SetStatus("Program started");
@@ -35,8 +38,34 @@ namespace BoardGenerator
 
         private void LoadConfigurationMenuItem_Click(object sender, EventArgs e)
         {
-            MenuHelper.LoadConfiguration(this);
+            Configuration config = MenuHelper.LoadConfiguration(this);
+
+            this.SetConfiguration(config);
         }
+
+        private void ReloadMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.ConfigFilePath == null)
+            {
+                return;
+            }
+
+            Configuration config = MenuHelper.LoadConfiguration(
+                this, this.ConfigFilePath);
+
+            this.SetConfiguration(config);
+        }
+
+        private void SetConfiguration(Configuration config)
+        {
+            if (config == null)
+            {
+                return;
+            }
+
+            this.boardEditor.SetConfiguration(config.Areas);
+        }
+
 
         private void CreateConfigurationExampleMenuItem_Click(object sender, EventArgs e)
         {
