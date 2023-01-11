@@ -38,6 +38,7 @@
             this.createExampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.boardEditor = new BoardGenerator.Control.BoardEditor();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +81,7 @@
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
             this.quitToolStripMenuItem.Text = "&Exit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.QuitMenuItem_Click);
             // 
@@ -122,11 +123,21 @@
             this.logToolStripMenuItem.Text = "&Log";
             this.logToolStripMenuItem.Click += new System.EventHandler(this.OpenLogMenuItem_Click);
             // 
+            // boardEditor
+            // 
+            this.boardEditor.BackColor = System.Drawing.Color.Gray;
+            this.boardEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.boardEditor.Location = new System.Drawing.Point(0, 24);
+            this.boardEditor.Name = "boardEditor";
+            this.boardEditor.Size = new System.Drawing.Size(800, 404);
+            this.boardEditor.TabIndex = 2;
+            // 
             // BoardGeneratorFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.boardEditor);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
@@ -154,5 +165,6 @@
         private ToolStripMenuItem createExampleToolStripMenuItem;
         private ToolStripMenuItem loadToolStripMenuItem;
         private ToolStripMenuItem logToolStripMenuItem;
+        private Control.BoardEditor boardEditor;
     }
 }
