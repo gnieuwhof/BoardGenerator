@@ -11,6 +11,7 @@
         private Point offset;
 
         private Area[] areas;
+        private Rectangle bounds;
 
 
         public BoardEditor()
@@ -25,7 +26,10 @@
 
         public void SetConfiguration(Area[] areas)
         {
+            this.position = new Point(this.Size.Width / 2, this.Height / 2);
+
             this.areas = areas;
+            this.bounds = Config.GetBounds(areas);
 
             this.Refresh();
         }
@@ -48,8 +52,10 @@
 
         private void DrawArea(Graphics g, Area area)
         {
-            var areaPosition = new Point(
-                this.Position.X + area.X, this.Position.Y + area.Y);
+            int x = this.Position.X - (this.bounds.Width / 2) + area.X;
+            int y = this.Position.Y - (this.bounds.Height / 2) + area.Y;
+
+            var areaPosition = new Point(x, y);
 
             var areaSize = new Size(area.Width, area.Height);
 

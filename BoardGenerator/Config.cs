@@ -31,6 +31,13 @@
             _ = config ??
                 throw new ArgumentNullException(nameof(config));
 
+            Rectangle result = GetBounds(config.Areas);
+
+            return result;
+        }
+
+        public static Rectangle GetBounds(Area[] areas)
+        {
             Logging.EnsureEmptyLine();
             Logging.Log("Getting Bounds");
 
@@ -39,9 +46,9 @@
             int right = 0;
             int bottom = 0;
 
-            if (config.Areas != null)
+            if (areas != null)
             {
-                foreach (Area area in config.Areas)
+                foreach (Area area in areas)
                 {
                     if (area.X < left)
                     {
