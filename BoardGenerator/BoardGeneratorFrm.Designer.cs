@@ -29,18 +29,19 @@
         private void InitializeComponent()
         {
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoReloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createExampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
-            this.autoReloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.positionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -48,17 +49,21 @@
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
+            this.statusLabel,
+            this.positionLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 428);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(800, 22);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel
+            // statusLabel
             // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(734, 17);
+            this.statusLabel.Spring = true;
+            this.statusLabel.Text = "Status";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // menuStrip
             // 
@@ -101,21 +106,28 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.loadToolStripMenuItem.Text = "&Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadConfigurationMenuItem_Click);
             // 
             // reloadToolStripMenuItem
             // 
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.reloadToolStripMenuItem.Text = "&Reload";
             this.reloadToolStripMenuItem.Click += new System.EventHandler(this.ReloadMenuItem_Click);
+            // 
+            // autoReloadToolStripMenuItem
+            // 
+            this.autoReloadToolStripMenuItem.Name = "autoReloadToolStripMenuItem";
+            this.autoReloadToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.autoReloadToolStripMenuItem.Text = "&Auto Reload";
+            this.autoReloadToolStripMenuItem.Click += new System.EventHandler(this.AutoReloadMenuItem_Click);
             // 
             // createExampleToolStripMenuItem
             // 
             this.createExampleToolStripMenuItem.Name = "createExampleToolStripMenuItem";
-            this.createExampleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.createExampleToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.createExampleToolStripMenuItem.Text = "Create &Example";
             this.createExampleToolStripMenuItem.Click += new System.EventHandler(this.CreateConfigurationExampleMenuItem_Click);
             // 
@@ -143,12 +155,11 @@
             this.boardEditor.Size = new System.Drawing.Size(800, 404);
             this.boardEditor.TabIndex = 2;
             // 
-            // autoReloadToolStripMenuItem
+            // positionLabel
             // 
-            this.autoReloadToolStripMenuItem.Name = "autoReloadToolStripMenuItem";
-            this.autoReloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.autoReloadToolStripMenuItem.Text = "&Auto Reload";
-            this.autoReloadToolStripMenuItem.Click += new System.EventHandler(this.AutoReloadMenuItem_Click);
+            this.positionLabel.Name = "positionLabel";
+            this.positionLabel.Size = new System.Drawing.Size(51, 17);
+            this.positionLabel.Text = "X: 0, Y: 0";
             // 
             // BoardGeneratorFrm
             // 
@@ -178,7 +189,7 @@
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem quitToolStripMenuItem;
         private ToolStripMenuItem windowToolStripMenuItem;
-        private ToolStripStatusLabel toolStripStatusLabel;
+        private ToolStripStatusLabel statusLabel;
         private ToolStripMenuItem configurationToolStripMenuItem;
         private ToolStripMenuItem createExampleToolStripMenuItem;
         private ToolStripMenuItem loadToolStripMenuItem;
@@ -186,5 +197,6 @@
         private Control.BoardEditor boardEditor;
         private ToolStripMenuItem reloadToolStripMenuItem;
         private ToolStripMenuItem autoReloadToolStripMenuItem;
+        private ToolStripStatusLabel positionLabel;
     }
 }

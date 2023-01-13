@@ -14,6 +14,8 @@ namespace BoardGenerator
             InitializeComponent();
 
             this.Config = new Config(this);
+
+            this.boardEditor.Dragged = this.BoardDragged;
         }
 
 
@@ -31,7 +33,7 @@ namespace BoardGenerator
         {
             string timestamp = DateTime.Now.ToString("HH:mm:ss");
 
-            this.toolStripStatusLabel.Text = $"[{timestamp}] {status}";
+            this.statusLabel.Text = $"[{timestamp}] {status}";
 
             Logging.Log($"Status updated to: {status}");
             Logging.EnsureEmptyLine();
@@ -52,6 +54,13 @@ namespace BoardGenerator
         private void ReloadMenuItem_Click(object sender, EventArgs e)
         {
             this.InnerReloadConfig();
+        }
+
+        private void BoardDragged()
+        {
+            int x = this.boardEditor.Position.X;
+            int y = this.boardEditor.Position.Y;
+            this.positionLabel.Text = $"X: {x}, Y: {y}";
         }
 
         public void ConfigFileChanged()

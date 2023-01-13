@@ -20,8 +20,10 @@
         }
 
 
-        private Point Position => new Point(
+        public Point Position => new Point(
             this.position.X - this.offset.X, this.position.Y - this.offset.Y);
+
+        public Action Dragged;
 
 
         public void SetConfiguration(Area[] areas, bool resetPosition)
@@ -29,6 +31,7 @@
             if (resetPosition)
             {
                 this.position = new Point(this.Size.Width / 2, this.Height / 2);
+                this.Dragged?.Invoke();
             }
 
             this.areas = areas;
@@ -93,6 +96,8 @@
                 );
 
             this.Refresh();
+
+            this.Dragged?.Invoke();
         }
 
         private void BoardEditor_MouseUp(object sender, MouseEventArgs e)
