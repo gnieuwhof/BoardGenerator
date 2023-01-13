@@ -3,9 +3,33 @@
     using BoardGenerator.Conf;
     using Newtonsoft.Json;
 
-    internal static class Config
+    public class Config
     {
-        public static Configuration Deserialize(string json)
+        private readonly BoardGeneratorFrm frm;
+        private readonly FileSystemWatcher watcher;
+
+
+        public Config(BoardGeneratorFrm frm)
+        {
+            this.frm = frm ??
+                throw new ArgumentNullException(nameof(frm));
+
+            watcher = new FileSystemWatcher();
+
+            watcher.NotifyFilter =
+                //NotifyFilters.LastAccess |
+                NotifyFilters.LastWrite
+                //| NotifyFilters.FileName | NotifyFilters.DirectoryName
+                ;
+
+            watcher.Changed += new FileSystemEventHandler(OnChanged);
+            //watcher.Created += new FileSystemEventHandler(OnChanged);
+            //watcher.Deleted += new FileSystemEventHandler(OnChanged);
+            //watcher.Renamed += new RenamedEventHandler(OnRenamed);
+        }
+
+
+        public Configuration Deserialize(string json)
         {
             Configuration config = JsonConvert
                 .DeserializeObject<Configuration>(json);
@@ -13,7 +37,7 @@
             return config;
         }
 
-        public static string Serialize(Configuration config)
+        public string Serialize(Configuration config)
         {
             var settings = new JsonSerializerSettings
             {
@@ -26,7 +50,7 @@
             return json;
         }
 
-        public static Rectangle GetBounds(Configuration config)
+        public Rectangle GetBounds(Configuration config)
         {
             _ = config ??
                 throw new ArgumentNullException(nameof(config));
@@ -88,7 +112,7 @@
             return result;
         }
 
-        public static Configuration CreateExample()
+        public Configuration CreateExample()
         {
             var area1 = new Area
             {
@@ -142,6 +166,23 @@
             Logging.LogWithEmptyLine("Example configuration created");
 
             return config;
+        }
+
+        public void WatchFile(string filePath)
+        {
+            string directory = Path.GetDirectoryName(filePath);
+            string fileName = Path.GetFileName(filePath);
+
+            watcher.Path = directory;
+
+            watcher.Filter = fileName;
+
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private void OnChanged(object source, FileSystemEventArgs e)
+        {
+            this.frm.ConfigFileChanged();
         }
     }
 }

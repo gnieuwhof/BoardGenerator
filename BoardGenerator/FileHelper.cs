@@ -4,6 +4,30 @@
 
     internal static class FileHelper
     {
+        public static bool IsFileInUse(string filePath)
+        {
+            var file = new FileInfo(filePath);
+
+            try
+            {
+                using (FileStream stream = file.Open(
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.None)
+                    )
+                {
+                    stream.Close();
+                }
+            }
+            catch(IOException)
+            {
+                Logging.Log("X ");
+                return true;
+            }
+
+            return false;
+        }
+
         public static string ReadFromStream(Stream stream)
         {
             _ = stream ??

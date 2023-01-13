@@ -30,6 +30,8 @@
                         result = InnerLoadConfig(frm, fileStream, filePath);
 
                         frm.ConfigFilePath = filePath;
+
+                        frm.Config.WatchFile(filePath);
                     }
                 }
             }
@@ -82,7 +84,7 @@
         {
             string fileContent = FileHelper.ReadFromStream(fileStream);
 
-            Configuration result = Config.Deserialize(fileContent);
+            Configuration result = frm.Config.Deserialize(fileContent);
 
             Logging.Log($"Loaded configuration file: {filePath}");
 
@@ -98,7 +100,7 @@
 
             Logging.EnsureEmptyLine();
 
-            var example = Config.CreateExample();
+            var example = frm.Config.CreateExample();
 
             try
             {
@@ -111,7 +113,7 @@
                 {
                     var fs = (System.IO.FileStream)sfd.OpenFile();
 
-                    string json = Config.Serialize(example);
+                    string json = frm.Config.Serialize(example);
 
                     FileHelper.WriteToStream(fs, json);
 

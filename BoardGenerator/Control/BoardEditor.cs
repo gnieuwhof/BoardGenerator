@@ -24,9 +24,12 @@
             this.position.X - this.offset.X, this.position.Y - this.offset.Y);
 
 
-        public void SetConfiguration(Area[] areas)
+        public void SetConfiguration(Area[] areas, bool resetPosition)
         {
-            this.position = new Point(this.Size.Width / 2, this.Height / 2);
+            if (resetPosition)
+            {
+                this.position = new Point(this.Size.Width / 2, this.Height / 2);
+            }
 
             this.areas = areas;
             this.bounds = Config.GetBounds(areas);
@@ -52,8 +55,8 @@
 
         private void DrawArea(Graphics g, Area area)
         {
-            int x = this.Position.X - (this.bounds.Width / 2) + area.X;
-            int y = this.Position.Y - (this.bounds.Height / 2) + area.Y;
+            int x = this.Position.X - (this.bounds.Width / 2) + area.X - this.bounds.Left;
+            int y = this.Position.Y - (this.bounds.Height / 2) + area.Y - this.bounds.Top;
 
             var areaPosition = new Point(x, y);
 

@@ -35,11 +35,12 @@
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createExampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
-            this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoReloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -91,6 +92,7 @@
             this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadToolStripMenuItem,
             this.reloadToolStripMenuItem,
+            this.autoReloadToolStripMenuItem,
             this.createExampleToolStripMenuItem});
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
             this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -102,6 +104,13 @@
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.loadToolStripMenuItem.Text = "&Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.LoadConfigurationMenuItem_Click);
+            // 
+            // reloadToolStripMenuItem
+            // 
+            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
+            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadToolStripMenuItem.Text = "&Reload";
+            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.ReloadMenuItem_Click);
             // 
             // createExampleToolStripMenuItem
             // 
@@ -134,12 +143,12 @@
             this.boardEditor.Size = new System.Drawing.Size(800, 404);
             this.boardEditor.TabIndex = 2;
             // 
-            // reloadToolStripMenuItem
+            // autoReloadToolStripMenuItem
             // 
-            this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
-            this.reloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.reloadToolStripMenuItem.Text = "&Reload";
-            this.reloadToolStripMenuItem.Click += new System.EventHandler(this.ReloadMenuItem_Click);
+            this.autoReloadToolStripMenuItem.Name = "autoReloadToolStripMenuItem";
+            this.autoReloadToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.autoReloadToolStripMenuItem.Text = "&Auto Reload";
+            this.autoReloadToolStripMenuItem.Click += new System.EventHandler(this.AutoReloadMenuItem_Click);
             // 
             // BoardGeneratorFrm
             // 
@@ -176,5 +185,6 @@
         private ToolStripMenuItem logToolStripMenuItem;
         private Control.BoardEditor boardEditor;
         private ToolStripMenuItem reloadToolStripMenuItem;
+        private ToolStripMenuItem autoReloadToolStripMenuItem;
     }
 }

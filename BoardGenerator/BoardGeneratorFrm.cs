@@ -5,13 +5,19 @@ namespace BoardGenerator
     public partial class BoardGeneratorFrm : Form
     {
         private LogFrm logFrm;
+        private bool autoReloadConfig = false;
+        private delegate void ReloadCallback();
 
 
         public BoardGeneratorFrm()
         {
             InitializeComponent();
+
+            this.Config = new Config(this);
         }
 
+
+        public Config Config { get; }
 
         public string ConfigFilePath { get; set; }
 
@@ -40,30 +46,72 @@ namespace BoardGenerator
         {
             Configuration config = MenuHelper.LoadConfiguration(this);
 
-            this.SetConfiguration(config);
+            this.SetConfiguration(config, resetPosition: true);
         }
 
         private void ReloadMenuItem_Click(object sender, EventArgs e)
+        {
+            this.InnerReloadConfig();
+        }
+
+        public void ConfigFileChanged()
+        {
+            if (!this.autoReloadConfig)
+            {
+                return;
+            }
+
+            if (this.boardEditor.InvokeRequired)
+            {
+                var callback = new ReloadCallback(this.InnerReloadConfig);
+                this.Invoke(callback);
+            }
+            else
+            {
+                this.InnerReloadConfig();
+            }
+        }
+
+        private void InnerReloadConfig()
         {
             if (this.ConfigFilePath == null)
             {
                 return;
             }
 
+            int counter = 1;
+            int delayMs = 1;
+
+            do
+            {
+                Thread.Sleep(delayMs);
+
+                ++counter;
+
+                if (counter > 5)
+                {
+                    // Loading the file will probably throw, too bad.
+                    break;
+                }
+
+                delayMs *= 2;
+            }
+            while (FileHelper.IsFileInUse(this.ConfigFilePath));
+
             Configuration config = MenuHelper.LoadConfiguration(
                 this, this.ConfigFilePath);
 
-            this.SetConfiguration(config);
+            this.SetConfiguration(config, resetPosition: false);
         }
 
-        private void SetConfiguration(Configuration config)
+        private void SetConfiguration(Configuration config, bool resetPosition)
         {
             if (config == null)
             {
                 return;
             }
 
-            this.boardEditor.SetConfiguration(config.Areas);
+            this.boardEditor.SetConfiguration(config.Areas, resetPosition);
         }
 
 
@@ -83,6 +131,13 @@ namespace BoardGenerator
 
             logFrm.Show();
             logFrm.BringToFront();
+        }
+
+        private void AutoReloadMenuItem_Click(object sender, EventArgs e)
+        {
+            this.autoReloadConfig = !this.autoReloadConfig;
+
+            this.autoReloadToolStripMenuItem.Checked = this.autoReloadConfig;
         }
     }
 }
