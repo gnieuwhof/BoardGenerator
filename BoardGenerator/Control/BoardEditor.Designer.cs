@@ -38,6 +38,8 @@
             this.Name = "BoardEditor";
             this.Size = new System.Drawing.Size(359, 287);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.BoardEditor_Paint);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BoardEditor_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.BoardEditor_KeyUp);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BoardEditor_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BoardEditor_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BoardEditor_MouseUp);

@@ -12,19 +12,69 @@
 
         private Area[] areas;
         private Rectangle bounds;
+        private bool ctrlDown = false;
 
 
         public BoardEditor()
         {
             InitializeComponent();
+
+            this.MouseWheel += BoardEditor_MouseWheel;
+            this.LostFocus += BoardEditor_LostFocus;
         }
 
+
+        public int Zoom { get; set; }
+
+        public float ScaleFactor
+        {
+            get
+            {
+                var abs = Math.Abs(this.Zoom);
+                var factor = (float)Math.Pow(1.25, abs);
+
+                if (this.Zoom < 0)
+                {
+                    return 1 / factor;
+                }
+
+                return factor;
+            }
+        }
 
         public Point Position => new Point(
             this.position.X - this.offset.X, this.position.Y - this.offset.Y);
 
-        public Action Dragged;
+        public Action Dragged { get; set; }
+        public Action ZoomChanged { get; set; }
 
+
+
+        private void BoardEditor_LostFocus(object sender, EventArgs e)
+        {
+            this.ctrlDown = false;
+        }
+
+        private void BoardEditor_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (this.ctrlDown)
+            {
+                if (e.Delta > 0)
+                {
+                    // The user scrolled up.
+                    ++this.Zoom;
+                }
+                else
+                {
+                    // The user scrolled down.
+                    --this.Zoom;
+                }
+
+                this.Refresh();
+
+                this.ZoomChanged?.Invoke();
+            }
+        }
 
         public void SetConfiguration(Area[] areas, bool resetPosition)
         {
@@ -58,12 +108,23 @@
 
         private void DrawArea(Graphics g, Area area)
         {
-            int x = this.Position.X - (this.bounds.Width / 2) + area.X - this.bounds.Left;
-            int y = this.Position.Y - (this.bounds.Height / 2) + area.Y - this.bounds.Top;
+            float scale = this.ScaleFactor;
+
+            int areaX = (int)(area.X * scale);
+            int areaY = (int)(area.Y * scale);
+
+            int boundsWidth = (int)(this.bounds.Width * scale);
+            int boundsHeight = (int)(this.bounds.Width * scale);
+
+            int x = this.Position.X - (boundsWidth / 2) + areaX - this.bounds.Left;
+            int y = this.Position.Y - (boundsHeight / 2) + areaY - this.bounds.Top;
 
             var areaPosition = new Point(x, y);
 
-            var areaSize = new Size(area.Width, area.Height);
+            int width = (int)(area.Width * scale);
+            int height = (int)(area.Height * scale);
+
+            var areaSize = new Size(width, height);
 
 
             var pen = new Pen(Color.Yellow, 3);
@@ -107,6 +168,16 @@
             this.position = this.Position;
 
             this.offset = new Point();
+        }
+
+        private void BoardEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            this.ctrlDown = e.Control;
+        }
+
+        private void BoardEditor_KeyUp(object sender, KeyEventArgs e)
+        {
+            this.ctrlDown = e.Control;
         }
     }
 }

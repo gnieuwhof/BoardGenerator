@@ -30,6 +30,7 @@
         {
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.positionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,7 +42,7 @@
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
-            this.positionLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.zoomLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -50,20 +51,29 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
-            this.positionLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 428);
+            this.positionLabel,
+            this.zoomLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 426);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip.Size = new System.Drawing.Size(800, 24);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(734, 17);
+            this.statusLabel.Size = new System.Drawing.Size(675, 19);
             this.statusLabel.Spring = true;
             this.statusLabel.Text = "Status";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // positionLabel
+            // 
+            this.positionLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.positionLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.positionLabel.Name = "positionLabel";
+            this.positionLabel.Size = new System.Drawing.Size(55, 19);
+            this.positionLabel.Text = "X: 0, Y: 0";
             // 
             // menuStrip
             // 
@@ -152,14 +162,17 @@
             this.boardEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.boardEditor.Location = new System.Drawing.Point(0, 24);
             this.boardEditor.Name = "boardEditor";
-            this.boardEditor.Size = new System.Drawing.Size(800, 404);
+            this.boardEditor.Size = new System.Drawing.Size(800, 402);
             this.boardEditor.TabIndex = 2;
+            this.boardEditor.Zoom = 0;
             // 
-            // positionLabel
+            // zoomLabel
             // 
-            this.positionLabel.Name = "positionLabel";
-            this.positionLabel.Size = new System.Drawing.Size(51, 17);
-            this.positionLabel.Text = "X: 0, Y: 0";
+            this.zoomLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.zoomLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.zoomLabel.Name = "zoomLabel";
+            this.zoomLabel.Size = new System.Drawing.Size(55, 19);
+            this.zoomLabel.Text = "Zoom: 0";
             // 
             // BoardGeneratorFrm
             // 
@@ -198,5 +211,6 @@
         private ToolStripMenuItem reloadToolStripMenuItem;
         private ToolStripMenuItem autoReloadToolStripMenuItem;
         private ToolStripStatusLabel positionLabel;
+        private ToolStripStatusLabel zoomLabel;
     }
 }

@@ -16,6 +16,7 @@ namespace BoardGenerator
             this.Config = new Config(this);
 
             this.boardEditor.Dragged = this.BoardDragged;
+            this.boardEditor.ZoomChanged = this.Zoomed;
         }
 
 
@@ -61,6 +62,11 @@ namespace BoardGenerator
             int x = this.boardEditor.Position.X;
             int y = this.boardEditor.Position.Y;
             this.positionLabel.Text = $"X: {x}, Y: {y}";
+        }
+
+        private void Zoomed()
+        {
+            this.zoomLabel.Text = $"Zoom: {this.boardEditor.Zoom}";
         }
 
         public void ConfigFileChanged()
