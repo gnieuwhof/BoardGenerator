@@ -117,6 +117,8 @@ namespace BoardGenerator
                 this, this.ConfigFilePath);
 
             this.SetConfiguration(config, resetPosition: false);
+
+            this.SetStatus("Configuration reloaded");
         }
 
         private void SetConfiguration(Configuration config, bool resetPosition)

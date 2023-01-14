@@ -19,9 +19,8 @@
                     stream.Close();
                 }
             }
-            catch(IOException)
+            catch (IOException)
             {
-                Logging.Log("X ");
                 return true;
             }
 

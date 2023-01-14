@@ -42,13 +42,14 @@
             }
         }
 
-        public Point Position => new Point(
-            this.position.X - this.offset.X, this.position.Y - this.offset.Y);
+        public Point Position => this.GetOffset(this.offset, this.position);
 
         public Action Dragged { get; set; }
         public Action ZoomChanged { get; set; }
 
 
+        private Point GetOffset(Point offset, Point position) =>
+            new Point(position.X - offset.X, position.Y - offset.Y);
 
         private void BoardEditor_LostFocus(object sender, EventArgs e)
         {
@@ -61,12 +62,10 @@
             {
                 if (e.Delta > 0)
                 {
-                    // The user scrolled up.
                     ++this.Zoom;
                 }
                 else
                 {
-                    // The user scrolled down.
                     --this.Zoom;
                 }
 
@@ -114,10 +113,10 @@
             int areaY = (int)(area.Y * scale);
 
             int boundsWidth = (int)(this.bounds.Width * scale);
-            int boundsHeight = (int)(this.bounds.Width * scale);
+            int boundsHeight = (int)(this.bounds.Height * scale);
 
-            int x = this.Position.X - (boundsWidth / 2) + areaX - this.bounds.Left;
-            int y = this.Position.Y - (boundsHeight / 2) + areaY - this.bounds.Top;
+            int x = this.Position.X - (boundsWidth / 2) + areaX - this.bounds.X;
+            int y = this.Position.Y - (boundsHeight / 2) + areaY - this.bounds.Y;
 
             var areaPosition = new Point(x, y);
 
@@ -144,12 +143,15 @@
 
         private void BoardEditor_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!this.mouseDown)
+            if (!this.mouseDown ||
+                (this.bounds.Width == 0) ||
+                (this.bounds.Height == 0)
+                )
             {
                 return;
             }
 
-            var location = e.Location;
+            Point location = e.Location;
 
             this.offset = new Point(
                 this.mouseDownLocation.X - location.X,
