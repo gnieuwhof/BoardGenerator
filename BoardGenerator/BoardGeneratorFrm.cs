@@ -156,5 +156,23 @@ namespace BoardGenerator
 
             this.autoReloadToolStripMenuItem.Checked = this.autoReloadConfig;
         }
+
+        private void bordersMenuItem_Click(object sender, EventArgs e)
+        {
+            this.bordersToolStripMenuItem.Checked =
+                !this.bordersToolStripMenuItem.Checked;
+
+            this.boardEditor.SetDrawBorders(
+                this.bordersToolStripMenuItem.Checked);
+        }
+
+        private void labelsMenuItem_Click(object sender, EventArgs e)
+        {
+            this.labelsToolStripMenuItem.Checked =
+                !this.labelsToolStripMenuItem.Checked;
+
+            this.boardEditor.SetDrawLabels(
+                this.labelsToolStripMenuItem.Checked);
+        }
     }
 }

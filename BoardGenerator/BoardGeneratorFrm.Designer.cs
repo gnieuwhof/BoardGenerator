@@ -31,6 +31,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.positionLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.zoomLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,7 +43,9 @@
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
-            this.zoomLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -75,11 +78,20 @@
             this.positionLabel.Size = new System.Drawing.Size(55, 19);
             this.positionLabel.Text = "X: 0, Y: 0";
             // 
+            // zoomLabel
+            // 
+            this.zoomLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.zoomLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.zoomLabel.Name = "zoomLabel";
+            this.zoomLabel.Size = new System.Drawing.Size(55, 19);
+            this.zoomLabel.Text = "Zoom: 0";
+            // 
             // menuStrip
             // 
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.configurationToolStripMenuItem,
+            this.viewToolStripMenuItem,
             this.windowToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -152,7 +164,7 @@
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.logToolStripMenuItem.Text = "&Log";
             this.logToolStripMenuItem.Click += new System.EventHandler(this.OpenLogMenuItem_Click);
             // 
@@ -160,19 +172,40 @@
             // 
             this.boardEditor.BackColor = System.Drawing.Color.Gray;
             this.boardEditor.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.boardEditor.Dragged = null;
             this.boardEditor.Location = new System.Drawing.Point(0, 24);
             this.boardEditor.Name = "boardEditor";
             this.boardEditor.Size = new System.Drawing.Size(800, 402);
             this.boardEditor.TabIndex = 2;
             this.boardEditor.Zoom = 0;
+            this.boardEditor.ZoomChanged = null;
             // 
-            // zoomLabel
+            // viewToolStripMenuItem
             // 
-            this.zoomLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-            this.zoomLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
-            this.zoomLabel.Name = "zoomLabel";
-            this.zoomLabel.Size = new System.Drawing.Size(55, 19);
-            this.zoomLabel.Text = "Zoom: 0";
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.labelsToolStripMenuItem,
+            this.bordersToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // labelsToolStripMenuItem
+            // 
+            this.labelsToolStripMenuItem.Checked = true;
+            this.labelsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.labelsToolStripMenuItem.Name = "labelsToolStripMenuItem";
+            this.labelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.labelsToolStripMenuItem.Text = "&Labels";
+            this.labelsToolStripMenuItem.Click += new System.EventHandler(this.labelsMenuItem_Click);
+            // 
+            // bordersToolStripMenuItem
+            // 
+            this.bordersToolStripMenuItem.Checked = true;
+            this.bordersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.bordersToolStripMenuItem.Name = "bordersToolStripMenuItem";
+            this.bordersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bordersToolStripMenuItem.Text = "&Borders";
+            this.bordersToolStripMenuItem.Click += new System.EventHandler(this.bordersMenuItem_Click);
             // 
             // BoardGeneratorFrm
             // 
@@ -212,5 +245,8 @@
         private ToolStripMenuItem autoReloadToolStripMenuItem;
         private ToolStripStatusLabel positionLabel;
         private ToolStripStatusLabel zoomLabel;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private ToolStripMenuItem labelsToolStripMenuItem;
+        private ToolStripMenuItem bordersToolStripMenuItem;
     }
 }

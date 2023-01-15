@@ -14,6 +14,9 @@
         private Rectangle bounds;
         private bool ctrlDown = false;
 
+        private bool drawBorders = true;
+        private bool drawLabels = true;
+
 
         public BoardEditor()
         {
@@ -47,6 +50,20 @@
         public Action Dragged { get; set; }
         public Action ZoomChanged { get; set; }
 
+
+        public void SetDrawBorders(bool drawBorders)
+        {
+            this.drawBorders = drawBorders;
+
+            this.Refresh();
+        }
+
+        public void SetDrawLabels(bool drawLabels)
+        {
+            this.drawLabels = drawLabels;
+
+            this.Refresh();
+        }
 
         private Point GetOffset(Point offset, Point position) =>
             new Point(position.X - offset.X, position.Y - offset.Y);
@@ -125,12 +142,21 @@
 
             var areaSize = new Size(width, height);
 
+            if (this.drawBorders)
+            {
+                var pen = new Pen(Color.Yellow, 3);
 
-            var pen = new Pen(Color.Yellow, 3);
+                var rect = new Rectangle(areaPosition, areaSize);
 
-            var rect = new Rectangle(areaPosition, areaSize);
+                g.DrawRectangle(pen, rect);
+            }
 
-            g.DrawRectangle(pen, rect);
+            if (this.drawLabels)
+            {
+                var font = new Font("Consolas", 15);
+
+                g.DrawString(area.Name, font, Brushes.Yellow, new Point(x + 5, y + 5));
+            }
         }
 
 
