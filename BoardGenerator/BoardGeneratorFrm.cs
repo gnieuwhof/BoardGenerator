@@ -7,6 +7,7 @@ namespace BoardGenerator
         private LogFrm logFrm;
         private bool autoReloadConfig = false;
         private delegate void ReloadCallback();
+        private Configuration configuration;
 
 
         public BoardGeneratorFrm()
@@ -47,9 +48,9 @@ namespace BoardGenerator
 
         private void LoadConfigurationMenuItem_Click(object sender, EventArgs e)
         {
-            Configuration config = MenuHelper.LoadConfiguration(this);
+            this.configuration = MenuHelper.LoadConfiguration(this);
 
-            this.SetConfiguration(config, resetPosition: true);
+            this.SetConfiguration(this.configuration, resetPosition: true);
         }
 
         private void ReloadMenuItem_Click(object sender, EventArgs e)
@@ -113,10 +114,10 @@ namespace BoardGenerator
             }
             while (FileHelper.IsFileInUse(this.ConfigFilePath));
 
-            Configuration config = MenuHelper.LoadConfiguration(
+            this.configuration = MenuHelper.LoadConfiguration(
                 this, this.ConfigFilePath);
 
-            this.SetConfiguration(config, resetPosition: false);
+            this.SetConfiguration(this.configuration, resetPosition: false);
 
             this.SetStatus("Configuration reloaded");
         }
@@ -173,6 +174,19 @@ namespace BoardGenerator
 
             this.boardEditor.SetDrawLabels(
                 this.labelsToolStripMenuItem.Checked);
+        }
+
+        private void RegenerateMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.configuration == null)
+            {
+                this.SetStatus("Could not regenerate, no configuration loaded.");
+                return;
+            }
+
+            Generator.Regenerate(this, this.configuration);
+
+            this.boardEditor.Refresh();
         }
     }
 }

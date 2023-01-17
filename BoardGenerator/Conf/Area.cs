@@ -19,11 +19,38 @@
 
         public string Folder { get; set; }
 
-        public string File { get; set; }
+        private string file;
+        public string File
+        {
+            get => this.file;
+            set
+            {
+                this.file = value;
+                if (this.imageFile != value)
+                {
+                    this.imageFile = null;
+                    this.img = null;
+                }
+            }
+        }
 
 
         public string Group { get; set; }
 
         public bool? Exclusive { get; set; }
+
+
+        public bool? Locked { get; set; }
+
+        // ====
+
+        private string imageFile;
+        private Image img;
+        public Image Img => this.img;
+        public void SetImage(string imageFile, Image img)
+        {
+            this.imageFile = imageFile;
+            this.img = img;
+        }
     }
 }

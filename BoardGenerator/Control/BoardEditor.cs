@@ -114,7 +114,7 @@
                 return;
             }
 
-            foreach (Area area in this.areas)
+            foreach (Area area in this.areas.OrderBy(a => a.Z))
             {
                 Graphics g = e.Graphics;
 
@@ -142,9 +142,28 @@
 
             var areaSize = new Size(width, height);
 
+            if (!string.IsNullOrWhiteSpace(area.File))
+            {
+                if (!File.Exists(area.File))
+                {
+                    Logging.Log($"File {area.File} for area {area.Name} does not exist");
+                }
+
+                if(area.Img == null)
+                {
+                    area.SetImage(area.File, Image.FromFile(area.File));
+                }
+
+                g.DrawImage(area.Img, x, y, width, height);
+            }
+
             if (this.drawBorders)
             {
-                var pen = new Pen(Color.Yellow, 3);
+                Color color = (area.Locked == true)
+                    ? Color.LightGray
+                    : Color.Yellow;
+
+                var pen = new Pen(color, 3);
 
                 var rect = new Rectangle(areaPosition, areaSize);
 
@@ -155,7 +174,11 @@
             {
                 var font = new Font("Consolas", 15);
 
-                g.DrawString(area.Name, font, Brushes.Yellow, new Point(x + 5, y + 5));
+                Brush brush = (area.Locked == true)
+                    ? Brushes.LightGray
+                    : Brushes.Yellow;
+
+                g.DrawString(area.Name, font, brush, new Point(x + 5, y + 5));
             }
         }
 
