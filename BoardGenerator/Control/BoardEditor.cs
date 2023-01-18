@@ -101,7 +101,9 @@
                 this.Dragged?.Invoke();
             }
 
-            this.areas = areas;
+            this.areas = areas
+                .OrderBy(a => a.Z)
+                .ToArray();
             this.bounds = Config.GetBounds(areas);
 
             this.Refresh();
@@ -117,7 +119,7 @@
 
             this.SuspendLayout();
 
-            foreach (Area area in this.areas.OrderBy(a => a.Z))
+            foreach (Area area in this.areas)
             {
                 Graphics g = e.Graphics;
 
@@ -129,21 +131,14 @@
 
         private void DrawArea(Graphics g, Area area)
         {
-            float scale = this.ScaleFactor;
+            Rectangle areaRect = GetAreaRectangle(area);
 
-            int areaX = (int)(area.X * scale);
-            int areaY = (int)(area.Y * scale);
-
-            int boundsWidth = (int)(this.bounds.Width * scale);
-            int boundsHeight = (int)(this.bounds.Height * scale);
-
-            int x = this.Position.X - (boundsWidth / 2) + areaX - this.bounds.X;
-            int y = this.Position.Y - (boundsHeight / 2) + areaY - this.bounds.Y;
+            int x = areaRect.X;
+            int y = areaRect.Y;
+            int width = areaRect.Width;
+            int height = areaRect.Height;
 
             var areaPosition = new Point(x, y);
-
-            int width = (int)(area.Width * scale);
-            int height = (int)(area.Height * scale);
 
             var areaSize = new Size(width, height);
 
@@ -187,12 +182,63 @@
             }
         }
 
+        private Rectangle GetAreaRectangle(Area area)
+        {
+            float scale = this.ScaleFactor;
+
+            int areaX = (int)(area.X * scale);
+            int areaY = (int)(area.Y * scale);
+
+            int boundsWidth = (int)(this.bounds.Width * scale);
+            int boundsHeight = (int)(this.bounds.Height * scale);
+
+            int x = this.Position.X - (boundsWidth / 2) + areaX - this.bounds.X;
+            int y = this.Position.Y - (boundsHeight / 2) + areaY - this.bounds.Y;
+
+            int width = (int)(area.Width * scale);
+            int height = (int)(area.Height * scale);
+
+            var rectangle = new Rectangle(x, y, width, height);
+
+            return rectangle;
+        }
+
 
         private void BoardEditor_MouseDown(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Right)
+            {
+                var position = new Point(e.X, e.Y);
+
+                Area area = GetArea(position);
+
+                if (area != null)
+                {
+                    var ctxMenu = new ContextMenu(this, area);
+                    ctxMenu.Show(position);
+                }
+
+                return;
+            }
+
             this.mouseDown = true;
 
             this.mouseDownLocation = e.Location;
+        }
+
+        private Area GetArea(Point position)
+        {
+            foreach (Area area in this.areas)
+            {
+                Rectangle rect = GetAreaRectangle(area);
+
+                if (rect.Contains(position))
+                {
+                    return area;
+                }
+            }
+
+            return null;
         }
 
         private void BoardEditor_MouseMove(object sender, MouseEventArgs e)
