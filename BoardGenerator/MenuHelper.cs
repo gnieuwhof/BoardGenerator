@@ -38,7 +38,7 @@
             catch (Exception ex)
             {
                 string error = "An error occurred while loading configuration";
-                frm.SetStatus(error);
+                frm.SetError(error);
                 Logging.Log(error);
                 Logging.Log($"{ex}");
 
@@ -68,7 +68,7 @@
             catch (Exception ex)
             {
                 string error = "An error occurred while loading configuration";
-                frm.SetStatus(error);
+                frm.SetError(error);
                 Logging.Log(error);
                 Logging.Log($"{ex}");
 
@@ -131,7 +131,7 @@
             catch (Exception ex)
             {
                 string error = "An error occurred while saving configuration";
-                frm.SetStatus(error);
+                frm.SetError(error);
                 Logging.Log(error);
                 Logging.Log($"{ex}");
             }

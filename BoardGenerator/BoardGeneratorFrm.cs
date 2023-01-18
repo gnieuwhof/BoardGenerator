@@ -18,6 +18,7 @@ namespace BoardGenerator
 
             this.boardEditor.Dragged = this.BoardDragged;
             this.boardEditor.ZoomChanged = this.Zoomed;
+            this.boardEditor.CtrlShortcut = this.CtrlShortcut;
         }
 
 
@@ -31,10 +32,17 @@ namespace BoardGenerator
             this.SetStatus("Program started");
         }
 
-        public void SetStatus(string status)
+        public void SetError(string error) =>
+            this.SetStatus(error, Color.Yellow);
+
+        public void SetStatus(string status) =>
+            this.SetStatus(status, SystemColors.Control);
+
+        public void SetStatus(string status, Color color)
         {
             string timestamp = DateTime.Now.ToString("HH:mm:ss");
 
+            this.statusLabel.BackColor = color;
             this.statusLabel.Text = $"[{timestamp}] {status}";
 
             Logging.Log($"Status updated to: {status}");
@@ -176,17 +184,31 @@ namespace BoardGenerator
                 this.labelsToolStripMenuItem.Checked);
         }
 
-        private void RegenerateMenuItem_Click(object sender, EventArgs e)
+        private void GenerateMenuItem_Click(object sender, EventArgs e)
+        {
+            this.GenerateBoard();
+        }
+
+        private void GenerateBoard()
         {
             if (this.configuration == null)
             {
-                this.SetStatus("Could not regenerate, no configuration loaded.");
+                this.SetError("Could not generate, no configuration loaded.");
                 return;
             }
 
-            Generator.Regenerate(this, this.configuration);
+            Generator.Generate(this, this.configuration);
 
             this.boardEditor.Refresh();
+
+            this.SetStatus("Board generated");
+        }
+
+        private void CtrlShortcut(Keys keys)
+        {
+            if (keys == Keys.R)
+            {
+            }
         }
     }
 }

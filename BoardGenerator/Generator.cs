@@ -8,7 +8,7 @@
             new[] { "png", "jpg", "jpeg", "bmp" };
 
 
-        public static void Regenerate(BoardGeneratorFrm frm, Configuration config)
+        public static void Generate(BoardGeneratorFrm frm, Configuration config)
         {
             Logging.EnsureEmptyLine();
             Logging.Log("Regenerating board");
@@ -21,7 +21,7 @@
             if (!Directory.Exists(basePath))
             {
                 Logging.Log($"The base folder {basePath} does not exists");
-                frm.SetStatus("Regenerating board failed (base path does not exist)");
+                frm.SetError("Regenerating board failed (base path does not exist)");
                 return;
             }
 
@@ -47,7 +47,7 @@
                     if (!Directory.Exists(path))
                     {
                         Logging.Log($"Area folder {path} for area {area} does not exists");
-                        frm.SetStatus("Regenerating board failed (area path does not exist)");
+                        frm.SetError("Regenerating board failed (area path does not exist)");
                         return;
                     }
 
@@ -166,16 +166,16 @@
                 imageAndRatio = imageAndRatio
                     .ToDictionary(e => e.Key, e => e.Value);
 
-                if (imageAndRatio.Count <= 1)
-                {
-                    Logging.Log($"Image list exhausted for area {area.Name}");
-                    frm.SetStatus($"Could not get an exclusive image for area {area.Name}");
-                    return null;
-                }
-
                 foreach (string exclude in excludeList)
                 {
-                    imageAndRatio.Remove(exclude);
+                    bool removed = imageAndRatio.Remove(exclude);
+                }
+
+                if (!imageAndRatio.Any())
+                {
+                    Logging.Log($"Image list exhausted for area {area.Name}");
+                    frm.SetError($"Could not get an exclusive image for area {area.Name}");
+                    return null;
                 }
             }
 

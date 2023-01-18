@@ -49,6 +49,7 @@
 
         public Action Dragged { get; set; }
         public Action ZoomChanged { get; set; }
+        public Action<Keys> CtrlShortcut { get; set; }
 
 
         public void SetDrawBorders(bool drawBorders)
@@ -114,12 +115,16 @@
                 return;
             }
 
+            this.SuspendLayout();
+
             foreach (Area area in this.areas.OrderBy(a => a.Z))
             {
                 Graphics g = e.Graphics;
 
                 this.DrawArea(g, area);
             }
+
+            this.ResumeLayout();
         }
 
         private void DrawArea(Graphics g, Area area)
@@ -142,14 +147,14 @@
 
             var areaSize = new Size(width, height);
 
-            if (!string.IsNullOrWhiteSpace(area.File))
+            if (!this.mouseDown && !string.IsNullOrWhiteSpace(area.File))
             {
                 if (!File.Exists(area.File))
                 {
                     Logging.Log($"File {area.File} for area {area.Name} does not exist");
                 }
 
-                if(area.Img == null)
+                if (area.Img == null)
                 {
                     area.SetImage(area.File, Image.FromFile(area.File));
                 }
@@ -219,11 +224,18 @@
             this.position = this.Position;
 
             this.offset = new Point();
+
+            this.Refresh();
         }
 
         private void BoardEditor_KeyDown(object sender, KeyEventArgs e)
         {
             this.ctrlDown = e.Control;
+
+            if (this.ctrlDown)
+            {
+                this.CtrlShortcut?.Invoke(e.KeyCode);
+            }
         }
 
         private void BoardEditor_KeyUp(object sender, KeyEventArgs e)
