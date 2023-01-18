@@ -224,5 +224,55 @@ namespace BoardGenerator
 
             this.boardEditor.Refresh();
         }
+
+        private void SaveMenuItem_Click(object sender, EventArgs e)
+        {
+            string filePath = this.ConfigFilePath;
+
+            if (!File.Exists(filePath))
+            {
+                this.SaveAs();
+
+                return;
+            }
+
+            using (var fs = new FileStream(filePath,
+                FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+            {
+                MenuHelper.SaveConfiguration(this, this.configuration, fs, filePath);
+            }
+        }
+
+        private void SaveAsMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SaveAs();
+        }
+
+        private void SaveAs()
+        {
+            using (SaveFileDialog sfd = MenuHelper.ShowSaveFileDialog())
+            {
+                try
+                {
+                    if (sfd.FileName != "")
+                    {
+                        using (var fs = (System.IO.FileStream)sfd.OpenFile())
+                        {
+                            MenuHelper.SaveConfiguration(this,
+                                this.configuration, fs, sfd.FileName);
+                        }
+                    }
+                    else
+                    {
+                        this.SetStatus("Saving configuration was cancelled");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.SetError("An error occurred while saving configuration");
+                    Logging.Log($"{ex}");
+                }
+            }
+        }
     }
 }

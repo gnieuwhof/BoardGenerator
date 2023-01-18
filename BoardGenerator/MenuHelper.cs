@@ -98,24 +98,14 @@
 
             var example = frm.Config.CreateExample();
 
-            try
+            using (SaveFileDialog sfd = ShowSaveFileDialog())
             {
-                var sfd = new SaveFileDialog();
-                sfd.Filter = "JSON Configuration|*.json";
-                sfd.Title = "Save Configuration File";
-                sfd.ShowDialog();
-
                 if (sfd.FileName != "")
                 {
-                    var fs = (System.IO.FileStream)sfd.OpenFile();
-
-                    string json = frm.Config.Serialize(example);
-
-                    FileHelper.WriteToStream(fs, json);
-
-                    fs.Close();
-
-                    Logging.Log($"Configuration saved to: {sfd.FileName}");
+                    using (var fs = (System.IO.FileStream)sfd.OpenFile())
+                    {
+                        SaveConfiguration(frm, example, fs, sfd.FileName);
+                    }
 
                     frm.SetStatus("Example configuration saved");
                 }
@@ -123,6 +113,39 @@
                 {
                     frm.SetStatus("Creating example configuration was cancelled");
                 }
+            }
+        }
+
+        public static SaveFileDialog ShowSaveFileDialog()
+        {
+            var sfd = new SaveFileDialog();
+
+            sfd.Filter = "JSON Configuration|*.json";
+            sfd.Title = "Save Configuration File";
+
+            sfd.ShowDialog();
+
+            return sfd;
+        }
+
+        public static void SaveConfiguration(BoardGeneratorFrm frm,
+            Configuration config, FileStream fs, string filePath)
+        {
+            if (config == null)
+            {
+                frm.SetError("Could not save, no configuration loaded.");
+                return;
+            }
+
+            try
+            {
+                string json = frm.Config.Serialize(config);
+
+                FileHelper.WriteToStream(fs, json);
+
+                fs.Close();
+
+                frm.SetStatus($"Configuration saved to: {filePath}");
             }
             catch (Exception ex)
             {
