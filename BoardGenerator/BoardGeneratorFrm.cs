@@ -210,5 +210,19 @@ namespace BoardGenerator
             {
             }
         }
+
+        private void LockAllAreasMenuItem_Click(object sender, EventArgs e)
+        {
+            MenuHelper.LockAllAreas(this, this.configuration);
+
+            this.boardEditor.Refresh();
+        }
+
+        private void UnlockAllAreasMenuItem_Click(object sender, EventArgs e)
+        {
+            MenuHelper.UnlockAllAreas(this, this.configuration);
+
+            this.boardEditor.Refresh();
+        }
     }
 }

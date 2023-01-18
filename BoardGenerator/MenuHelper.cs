@@ -37,9 +37,7 @@
             }
             catch (Exception ex)
             {
-                string error = "An error occurred while loading configuration";
-                frm.SetError(error);
-                Logging.Log(error);
+                frm.SetError("An error occurred while loading configuration");
                 Logging.Log($"{ex}");
 
                 MessageBox.Show("Loading configuration failed.",
@@ -67,9 +65,7 @@
             }
             catch (Exception ex)
             {
-                string error = "An error occurred while loading configuration";
-                frm.SetError(error);
-                Logging.Log(error);
+                frm.SetError("An error occurred while loading configuration");
                 Logging.Log($"{ex}");
 
                 MessageBox.Show("Loading configuration failed.",
@@ -130,10 +126,50 @@
             }
             catch (Exception ex)
             {
-                string error = "An error occurred while saving configuration";
-                frm.SetError(error);
-                Logging.Log(error);
+                frm.SetError("An error occurred while saving configuration");
                 Logging.Log($"{ex}");
+            }
+        }
+
+        public static void LockAllAreas(
+            BoardGeneratorFrm frm, Configuration config)
+        {
+            if (config == null)
+            {
+                frm.SetError("Could not lock areas, no configuration loaded.");
+                return;
+            }
+
+            if (!config.Areas?.Any() == true)
+            {
+                frm.SetError("Could not lock areas, no areas in configuration.");
+                return;
+            }
+
+            foreach (Area area in config.Areas)
+            {
+                area.Locked = true;
+            }
+        }
+
+        public static void UnlockAllAreas(
+            BoardGeneratorFrm frm, Configuration config)
+        {
+            if (config == null)
+            {
+                frm.SetError("Could not unlock areas, no configuration loaded.");
+                return;
+            }
+
+            if (!config.Areas?.Any() == true)
+            {
+                frm.SetError("Could not unlock areas, no areas in configuration.");
+                return;
+            }
+
+            foreach (Area area in config.Areas)
+            {
+                area.Locked = null;
             }
         }
     }
