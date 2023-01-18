@@ -31,7 +31,10 @@
             var grouped = config.Areas.GroupBy(a => a.Group);
             foreach (var group in grouped)
             {
-                var ordered = group.OrderByDescending(g => g.Exclusive);
+                var ordered = group
+                    .OrderByDescending(g => g.Exclusive)
+                    .ThenByDescending(g =>g.Locked);
+
                 var excludeList = new List<string>();
                 foreach (Area area in ordered)
                 {
@@ -39,6 +42,12 @@
 
                     if (area.Locked == true)
                     {
+                        if ((area.Exclusive == true) &&
+                            File.Exists(area.File))
+                        {
+                            excludeList.Add(area.File);
+                        }
+
                         continue;
                     }
 

@@ -42,14 +42,15 @@
             this.menu.Items.Add(label);
         }
 
-        private void AddItem(string text, Action<object, EventArgs> action)
+        private void AddItem(string text, Action action)
         {
-            var eventHandler = new EventHandler(action);
+            var eventHandler = new EventHandler(
+                (object o, EventArgs e) => action?.Invoke());
 
             this.menu.Items.Add(text, null, eventHandler);
         }
 
-        private void ToggleLocked(object sender, EventArgs e)
+        private void ToggleLocked()
         {
             this.area.Locked = (this.area.Locked == true)
                 ? null
