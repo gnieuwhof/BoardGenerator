@@ -5,6 +5,9 @@
 
     public partial class BoardEditor : UserControl
     {
+        private const int BORDER_WIDTH = 4;
+
+
         private bool mouseDown = false;
         private Point mouseDownLocation;
         private Point position;
@@ -159,13 +162,20 @@
 
             if (this.drawBorders)
             {
+                int halfWidth = BORDER_WIDTH / 2;
+
+                var borderPosition = new Point(x + halfWidth, y + halfWidth);
+
+                var borderSize = new Size(
+                    width - BORDER_WIDTH, height - BORDER_WIDTH);
+
                 Color color = (area.Locked == true)
                     ? Color.LightGray
                     : Color.Yellow;
 
-                var pen = new Pen(color, 3);
+                var pen = new Pen(color, BORDER_WIDTH);
 
-                var rect = new Rectangle(areaPosition, areaSize);
+                var rect = new Rectangle(borderPosition, borderSize);
 
                 g.DrawRectangle(pen, rect);
             }
@@ -214,7 +224,8 @@
 
                 if (area != null)
                 {
-                    var ctxMenu = new ContextMenu(this, area);
+                    var ctxMenu = new ContextMenu(this, area, this.areas);
+
                     ctxMenu.Show(position);
                 }
 

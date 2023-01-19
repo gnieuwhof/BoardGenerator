@@ -73,5 +73,40 @@
 
             return basePath;
         }
+
+        public static OpenFileDialog ShowOpenFileDialog(
+            string title, string filter, bool restoreDirectory = true)
+        {
+            var openFileDialog = new OpenFileDialog();
+
+            // e.g. "Select Configuration File"
+            openFileDialog.Title = title;
+
+            // e.g. "JSON Configuration (*.json)|*.json"
+            openFileDialog.Filter = filter;
+
+            openFileDialog.RestoreDirectory = restoreDirectory;
+
+            openFileDialog.ShowDialog();
+
+            return openFileDialog;
+        }
+
+        public static SaveFileDialog ShowSaveFileDialog(
+            string title, string filter)
+        {
+            var saveFileDialog = new SaveFileDialog();
+
+            // e.g. "Save Configuration File"
+            saveFileDialog.Title = title;
+
+            // e.g. "JSON Configuration|*.json"
+            saveFileDialog.Filter = filter;
+
+            saveFileDialog.ShowDialog();
+
+            return saveFileDialog;
+        }
+
     }
 }

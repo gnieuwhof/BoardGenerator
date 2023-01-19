@@ -222,7 +222,7 @@
             this.labelsToolStripMenuItem.Name = "labelsToolStripMenuItem";
             this.labelsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.labelsToolStripMenuItem.Text = "&Labels";
-            this.labelsToolStripMenuItem.Click += new System.EventHandler(this.labelsMenuItem_Click);
+            this.labelsToolStripMenuItem.Click += new System.EventHandler(this.LabelsMenuItem_Click);
             // 
             // bordersToolStripMenuItem
             // 
@@ -231,7 +231,7 @@
             this.bordersToolStripMenuItem.Name = "bordersToolStripMenuItem";
             this.bordersToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.bordersToolStripMenuItem.Text = "&Borders";
-            this.bordersToolStripMenuItem.Click += new System.EventHandler(this.bordersMenuItem_Click);
+            this.bordersToolStripMenuItem.Click += new System.EventHandler(this.BordersMenuItem_Click);
             // 
             // windowToolStripMenuItem
             // 

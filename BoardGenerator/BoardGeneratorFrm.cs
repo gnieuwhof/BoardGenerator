@@ -166,7 +166,7 @@ namespace BoardGenerator
             this.autoReloadToolStripMenuItem.Checked = this.autoReloadConfig;
         }
 
-        private void bordersMenuItem_Click(object sender, EventArgs e)
+        private void BordersMenuItem_Click(object sender, EventArgs e)
         {
             this.bordersToolStripMenuItem.Checked =
                 !this.bordersToolStripMenuItem.Checked;
@@ -175,7 +175,7 @@ namespace BoardGenerator
                 this.bordersToolStripMenuItem.Checked);
         }
 
-        private void labelsMenuItem_Click(object sender, EventArgs e)
+        private void LabelsMenuItem_Click(object sender, EventArgs e)
         {
             this.labelsToolStripMenuItem.Checked =
                 !this.labelsToolStripMenuItem.Checked;
@@ -250,7 +250,9 @@ namespace BoardGenerator
 
         private void SaveAs()
         {
-            using (SaveFileDialog sfd = MenuHelper.ShowSaveFileDialog())
+            string title = "Save Configuration File";
+            string filter = "JSON Configuration|*.json";
+            using (SaveFileDialog sfd = FileHelper.ShowSaveFileDialog(title, filter))
             {
                 try
                 {

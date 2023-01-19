@@ -16,15 +16,16 @@
 
             try
             {
-                using (var openFileDialog = new OpenFileDialog())
+                string title = "Select Configuration File";
+
+                string filter = "JSON Configuration (*.json)|*.json";
+
+                using (var openFileDialog = FileHelper.ShowOpenFileDialog(title, filter))
                 {
-                    openFileDialog.Filter = "JSON Configuration (*.json)|*.json";
-                    openFileDialog.RestoreDirectory = true;
+                    string filePath = openFileDialog.FileName;
 
-                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    if (filePath != "")
                     {
-                        string filePath = openFileDialog.FileName;
-
                         Stream fileStream = openFileDialog.OpenFile();
 
                         result = InnerLoadConfig(frm, fileStream, filePath);
@@ -32,6 +33,10 @@
                         frm.ConfigFilePath = filePath;
 
                         frm.Config.WatchFile(filePath);
+                    }
+                    else
+                    {
+                        frm.SetStatus("Loading configuration was cancelled");
                     }
                 }
             }
@@ -98,11 +103,16 @@
 
             var example = frm.Config.CreateExample();
 
-            using (SaveFileDialog sfd = ShowSaveFileDialog())
+
+            string title = "Save Configuration File";
+
+            string filter = "JSON Configuration|*.json";
+
+            using (SaveFileDialog sfd = FileHelper.ShowSaveFileDialog(title, filter))
             {
                 if (sfd.FileName != "")
                 {
-                    using (var fs = (System.IO.FileStream)sfd.OpenFile())
+                    using (var fs = (FileStream)sfd.OpenFile())
                     {
                         SaveConfiguration(frm, example, fs, sfd.FileName);
                     }
@@ -114,18 +124,6 @@
                     frm.SetStatus("Creating example configuration was cancelled");
                 }
             }
-        }
-
-        public static SaveFileDialog ShowSaveFileDialog()
-        {
-            var sfd = new SaveFileDialog();
-
-            sfd.Filter = "JSON Configuration|*.json";
-            sfd.Title = "Save Configuration File";
-
-            sfd.ShowDialog();
-
-            return sfd;
         }
 
         public static void SaveConfiguration(BoardGeneratorFrm frm,
