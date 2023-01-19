@@ -32,20 +32,19 @@
 
         public int Zoom { get; set; }
 
-        public float ScaleFactor
+        public float ScaleFactor => GetScaleFactor(this.Zoom);
+
+        private static float GetScaleFactor(int zoom)
         {
-            get
+            var abs = Math.Abs(zoom);
+            var factor = (float)Math.Pow(1.25, abs);
+
+            if (zoom < 0)
             {
-                var abs = Math.Abs(this.Zoom);
-                var factor = (float)Math.Pow(1.25, abs);
-
-                if (this.Zoom < 0)
-                {
-                    return 1 / factor;
-                }
-
-                return factor;
+                return 1 / factor;
             }
+
+            return factor;
         }
 
         public Point Position => this.GetOffset(this.offset, this.position);
@@ -100,8 +99,56 @@
         {
             if (resetPosition)
             {
-                this.position = new Point(this.Size.Width / 2, this.Height / 2);
+                this.Zoom = 1;
+
+                int direction = 1;
+
+                var areaRect = Config.GetBounds(areas);
+
+                int areaWidth = areaRect.Width;
+                int areaHeight = areaRect.Height;
+
+                if (!Fits(areaWidth, areaHeight))
+                {
+                    direction = -1;
+                }
+
+                int zoom = 0;
+
+                while (true)
+                {
+                    if (direction == 1)
+                    {
+                        ++zoom;
+                    }
+                    else
+                    {
+                        --zoom;
+                    }
+
+                    float scaleFactor = GetScaleFactor(zoom);
+
+                    areaWidth = (int)(areaRect.Width * scaleFactor);
+                    areaHeight = (int)(areaRect.Height * scaleFactor);
+
+                    if (!Fits(areaWidth, areaHeight))
+                    {
+                        this.ZoomChanged?.Invoke();
+
+                        break;
+                    }
+
+                    this.Zoom = zoom;
+                }
+
+                this.position = new Point(this.Width / 2, this.Height / 2);
                 this.Dragged?.Invoke();
+
+                bool Fits(int w, int h)
+                {
+                    return ((this.Width - 10 > w) &&
+                        (this.Height - 10 > h));
+                }
             }
 
             this.areas = areas
@@ -157,7 +204,12 @@
                     area.SetImage(area.File, Image.FromFile(area.File));
                 }
 
-                g.DrawImage(area.Img, x, y, width, height);
+                float scale = this.ScaleFactor;
+
+                int scaledImgWidth = (int)(area.Img.Width * scale);
+                int scaledImgHeight = (int)(area.Img.Height * scale);
+
+                g.DrawImage(area.Img, x, y, scaledImgWidth, scaledImgHeight);
             }
 
             if (this.drawBorders)
