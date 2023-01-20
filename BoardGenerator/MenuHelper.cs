@@ -132,6 +132,7 @@
             if (config == null)
             {
                 frm.SetError("Could not save, no configuration loaded.");
+
                 return;
             }
 

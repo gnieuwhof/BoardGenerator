@@ -6,8 +6,9 @@ namespace BoardGenerator
     {
         private LogFrm logFrm;
         private bool autoReloadConfig = false;
-        private delegate void ReloadCallback();
+        private delegate void CrossThreadCallback();
         private Configuration configuration;
+        private DateTime statusBackColorSetToError;
 
 
         public BoardGeneratorFrm()
@@ -32,8 +33,33 @@ namespace BoardGenerator
             this.SetStatus("Program started");
         }
 
-        public void SetError(string error) =>
+        public async void SetError(string error)
+        {
             this.SetStatus(error, Color.Yellow);
+
+            var now = DateTime.Now;
+
+            this.statusBackColorSetToError = now;
+
+            await Task.Run(async () =>
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                if (this.statusBackColorSetToError != now)
+                {
+                    return;
+                }
+
+                var callback = new CrossThreadCallback(this.ResetLabelBackground);
+
+                this.Invoke(callback);
+            });
+        }
+
+        private void ResetLabelBackground()
+        {
+            this.statusLabel.BackColor = SystemColors.Control;
+        }
 
         public void SetStatus(string status) =>
             this.SetStatus(status, SystemColors.Control);
@@ -63,6 +89,13 @@ namespace BoardGenerator
 
         private void ReloadMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.configuration == null)
+            {
+                this.SetError("Could not reload, no configuration loaded.");
+
+                return;
+            }
+
             this.InnerReloadConfig();
         }
 
@@ -87,7 +120,8 @@ namespace BoardGenerator
 
             if (this.boardEditor.InvokeRequired)
             {
-                var callback = new ReloadCallback(this.InnerReloadConfig);
+                var callback = new CrossThreadCallback(this.InnerReloadConfig);
+
                 this.Invoke(callback);
             }
             else
@@ -146,62 +180,11 @@ namespace BoardGenerator
             MenuHelper.CreateConfigurationExample(this);
         }
 
-        private void OpenLogMenuItem_Click(object sender, EventArgs e)
-        {
-            if ((logFrm == null) || (logFrm.IsDisposed))
-            {
-                logFrm = new LogFrm();
-
-                Logging.SetLogFrm(logFrm);
-            }
-
-            logFrm.Show();
-            logFrm.BringToFront();
-        }
-
         private void AutoReloadMenuItem_Click(object sender, EventArgs e)
         {
             this.autoReloadConfig = !this.autoReloadConfig;
 
             this.autoReloadToolStripMenuItem.Checked = this.autoReloadConfig;
-        }
-
-        private void BordersMenuItem_Click(object sender, EventArgs e)
-        {
-            this.bordersToolStripMenuItem.Checked =
-                !this.bordersToolStripMenuItem.Checked;
-
-            this.boardEditor.SetDrawBorders(
-                this.bordersToolStripMenuItem.Checked);
-        }
-
-        private void LabelsMenuItem_Click(object sender, EventArgs e)
-        {
-            this.labelsToolStripMenuItem.Checked =
-                !this.labelsToolStripMenuItem.Checked;
-
-            this.boardEditor.SetDrawLabels(
-                this.labelsToolStripMenuItem.Checked);
-        }
-
-        private void GenerateMenuItem_Click(object sender, EventArgs e)
-        {
-            this.GenerateBoard();
-        }
-
-        private void GenerateBoard()
-        {
-            if (this.configuration == null)
-            {
-                this.SetError("Could not generate, no configuration loaded.");
-                return;
-            }
-
-            Generator.Generate(this, this.configuration);
-
-            this.boardEditor.Refresh();
-
-            this.SetStatus("Board generated");
         }
 
         private void CtrlShortcut(Keys keys)
@@ -211,22 +194,15 @@ namespace BoardGenerator
             }
         }
 
-        private void LockAllAreasMenuItem_Click(object sender, EventArgs e)
-        {
-            MenuHelper.LockAllAreas(this, this.configuration);
-
-            this.boardEditor.Refresh();
-        }
-
-        private void UnlockAllAreasMenuItem_Click(object sender, EventArgs e)
-        {
-            MenuHelper.UnlockAllAreas(this, this.configuration);
-
-            this.boardEditor.Refresh();
-        }
-
         private void SaveMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.configuration == null)
+            {
+                this.SetError("Could not save, no configuration loaded.");
+
+                return;
+            }
+
             string filePath = this.ConfigFilePath;
 
             if (!File.Exists(filePath))
@@ -245,6 +221,13 @@ namespace BoardGenerator
 
         private void SaveAsMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.configuration == null)
+            {
+                this.SetError("Could not save, no configuration loaded.");
+
+                return;
+            }
+
             this.SaveAs();
         }
 
@@ -275,6 +258,66 @@ namespace BoardGenerator
                     Logging.Log($"{ex}");
                 }
             }
+        }
+
+        private void GenerateMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.configuration == null)
+            {
+                this.SetError("Could not generate, no configuration loaded.");
+                return;
+            }
+
+            Generator.Generate(this, this.configuration);
+
+            this.boardEditor.Refresh();
+
+            this.SetStatus("Board generated");
+        }
+
+        private void LockAllAreasMenuItem_Click(object sender, EventArgs e)
+        {
+            MenuHelper.LockAllAreas(this, this.configuration);
+
+            this.boardEditor.Refresh();
+        }
+
+        private void UnlockAllAreasMenuItem_Click(object sender, EventArgs e)
+        {
+            MenuHelper.UnlockAllAreas(this, this.configuration);
+
+            this.boardEditor.Refresh();
+        }
+
+        private void BordersMenuItem_Click(object sender, EventArgs e)
+        {
+            this.bordersToolStripMenuItem.Checked =
+                !this.bordersToolStripMenuItem.Checked;
+
+            this.boardEditor.SetDrawBorders(
+                this.bordersToolStripMenuItem.Checked);
+        }
+
+        private void LabelsMenuItem_Click(object sender, EventArgs e)
+        {
+            this.labelsToolStripMenuItem.Checked =
+                !this.labelsToolStripMenuItem.Checked;
+
+            this.boardEditor.SetDrawLabels(
+                this.labelsToolStripMenuItem.Checked);
+        }
+
+        private void OpenLogMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((logFrm == null) || (logFrm.IsDisposed))
+            {
+                logFrm = new LogFrm();
+
+                Logging.SetLogFrm(logFrm);
+            }
+
+            logFrm.Show();
+            logFrm.BringToFront();
         }
     }
 }
