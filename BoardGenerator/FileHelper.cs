@@ -40,7 +40,7 @@
                 fileContent = reader.ReadToEnd();
             }
 
-            Logging.LogWithEmptyLine(
+            Logging.LogLine(
                 $"Read {fileContent.Length} characters from file stream");
 
             return fileContent;
@@ -60,7 +60,7 @@
 
             fileStream.Write(bytes, 0, bytes.Length);
 
-            Logging.LogWithEmptyLine(
+            Logging.LogLine(
                 $"Written {content.Length} characters to file stream");
         }
 

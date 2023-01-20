@@ -1,9 +1,15 @@
 ﻿namespace BoardGenerator
 {
     using BoardGenerator.Conf;
+    using System.Globalization;
 
     internal static class Generator
     {
+        private const int DEFAULT_WEIGHT = 100;
+
+        private static readonly Random random =
+            new Random(Guid.NewGuid().GetHashCode());
+
         private static readonly string[] IMAGE_EXTENSIONS =
             new[] { "png", "jpg", "jpeg", "bmp" };
 
@@ -33,7 +39,7 @@
             {
                 var ordered = group
                     .OrderByDescending(g => g.Exclusive)
-                    .ThenByDescending(g =>g.Locked);
+                    .ThenByDescending(g => g.Locked);
 
                 var excludeList = new List<string>();
                 foreach (Area area in ordered)
@@ -60,9 +66,9 @@
                         return;
                     }
 
-                    Dictionary<string, int> imageAndRatio = GetImages(path);
+                    Dictionary<string, int> imagesAndWeights = GetImages(path);
 
-                    string imageFile = RandomImage(frm, area, imageAndRatio, excludeList);
+                    string imageFile = RandomImage(frm, area, imagesAndWeights, excludeList);
 
                     if (area.Exclusive == true)
                     {
@@ -122,20 +128,20 @@
                 {
                     string fileName = Path.GetFileName(filePath);
 
-                    int ratio = GetRatio(fileName);
+                    int weight = GetWeight(fileName);
 
-                    result.Add(filePath, ratio);
+                    result.Add(filePath, weight);
                 }
             }
 
             return result;
         }
 
-        private static int GetRatio(string fileName)
+        private static int GetWeight(string fileName)
         {
             if (!fileName.StartsWith("__"))
             {
-                return 1;
+                return DEFAULT_WEIGHT;
             }
 
             int start = "__".Length;
@@ -143,28 +149,32 @@
 
             if (end <= start)
             {
-                return 1;
+                return DEFAULT_WEIGHT;
             }
 
             int length = (end - start);
 
-            string ratio = fileName.Substring(start, length);
+            string weight = fileName.Substring(start, length);
 
-            if (int.TryParse(ratio, out int result))
+            if (double.TryParse(weight, NumberStyles.Float,
+                CultureInfo.InvariantCulture, out double parsed))
             {
-                if (result > 0)
+                if (parsed > 0)
                 {
-                    return result;
+                    return (int)(parsed * DEFAULT_WEIGHT * 2);
                 }
             }
 
-            return 1;
+            Logging.EnsureEmptyLine();
+            Logging.LogLine($"Could not parse weight ({weight}) of file '{fileName}'");
+
+            return DEFAULT_WEIGHT;
         }
 
         private static string RandomImage(
             BoardGeneratorFrm frm,
             Area area,
-            Dictionary<string, int> imageAndRatio,
+            Dictionary<string, int> imagesAndWeights,
             IEnumerable<string> excludeList
             )
         {
@@ -172,15 +182,15 @@
 
             if (excludeList?.Any() == true)
             {
-                imageAndRatio = imageAndRatio
+                imagesAndWeights = imagesAndWeights
                     .ToDictionary(e => e.Key, e => e.Value);
 
                 foreach (string exclude in excludeList)
                 {
-                    bool removed = imageAndRatio.Remove(exclude);
+                    bool removed = imagesAndWeights.Remove(exclude);
                 }
 
-                if (!imageAndRatio.Any())
+                if (!imagesAndWeights.Any())
                 {
                     Logging.Log($"Image list exhausted for area {area.Name}");
                     frm.SetError($"Could not get an exclusive image for area {area.Name}");
@@ -188,17 +198,29 @@
                 }
             }
 
-            int total = imageAndRatio.Values.Sum();
+            var values = imagesAndWeights.Values;
 
-            int hash = Guid.NewGuid().GetHashCode();
+            int total = values.Sum();
 
-            var random = new Random(hash);
+            if (values.Any(v => v != DEFAULT_WEIGHT))
+            {
+                Logging.EnsureEmptyLine();
+                foreach (var kv in imagesAndWeights)
+                {
+                    string file = kv.Key;
+                    int weight = kv.Value;
+
+                    var percentage = Math.Round(((float)weight / total * 100), 2);
+
+                    Logging.Log($"File: {file} weight: {weight} ({percentage}%)");
+                }
+                Logging.Log();
+            }
 
             int val = random.Next(total);
+            double runningTotal = 0;
 
-            int runningTotal = 0;
-
-            foreach (var kv in imageAndRatio)
+            foreach (var kv in imagesAndWeights)
             {
                 result = kv.Key;
                 runningTotal += kv.Value;

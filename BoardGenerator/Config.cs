@@ -98,13 +98,13 @@
             }
             else
             {
-                Logging.LogWithEmptyLine("WARN: No areas found in config");
+                Logging.LogLine("WARN: No areas found in config");
             }
 
             int width = right - left;
             int height = bottom - top;
 
-            Logging.LogWithEmptyLine(
+            Logging.LogLine(
                 $"Bounds (left:{left}, top:{top}, right:{right}, bottom:{bottom})");
 
             var result = new Rectangle(left, top, width, height);
@@ -163,7 +163,7 @@
                 Areas = new[] { area1, area2, area3, area4 }
             };
 
-            Logging.LogWithEmptyLine("Example configuration created");
+            Logging.LogLine("Example configuration created");
 
             return config;
         }

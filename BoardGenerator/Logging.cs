@@ -39,7 +39,7 @@
             }
         }
 
-        public static void LogWithEmptyLine(string message = "")
+        public static void LogLine(string message = "")
         {
             Log(message);
             Log();
