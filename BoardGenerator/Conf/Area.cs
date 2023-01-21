@@ -1,4 +1,6 @@
-﻿namespace BoardGenerator.Conf
+﻿using Newtonsoft.Json;
+
+namespace BoardGenerator.Conf
 {
     public class Area
     {
@@ -46,7 +48,10 @@
 
         private string imageFile;
         private Image img;
+
+        [JsonIgnore]
         public Image Img => this.img;
+
         public void SetImage(string imageFile, Image img)
         {
             this.imageFile = imageFile;

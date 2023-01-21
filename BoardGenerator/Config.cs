@@ -60,10 +60,13 @@
             return result;
         }
 
-        public static Rectangle GetBounds(Area[] areas)
+        public static Rectangle GetBounds(Area[] areas, bool log = true)
         {
-            Logging.EnsureEmptyLine();
-            Logging.Log("Getting Bounds");
+            if (log)
+            {
+                Logging.EnsureEmptyLine();
+                Logging.Log("Getting Bounds");
+            }
 
             int left = 0;
             int top = 0;
@@ -104,8 +107,11 @@
             int width = right - left;
             int height = bottom - top;
 
-            Logging.LogLine(
-                $"Bounds (left:{left}, top:{top}, right:{right}, bottom:{bottom})");
+            if (log)
+            {
+                Logging.LogLine(
+                    $"Bounds (left:{left}, top:{top}, right:{right}, bottom:{bottom})");
+            }
 
             var result = new Rectangle(left, top, width, height);
 

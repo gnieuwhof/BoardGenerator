@@ -18,6 +18,7 @@
         {
             Logging.EnsureEmptyLine();
             Logging.Log("Regenerating board");
+            Logging.Log();
 
             string basePath = FileHelper.GetBasePath(config.BasePath);
 

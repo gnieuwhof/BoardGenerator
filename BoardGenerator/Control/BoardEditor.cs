@@ -18,7 +18,8 @@
         private bool ctrlDown = false;
 
         private bool drawBorders = true;
-        private bool drawLabels = true;
+        private bool drawAreaNames = true;
+        private bool drawGroupNames = true;
 
 
         public BoardEditor()
@@ -63,7 +64,14 @@
 
         public void SetDrawLabels(bool drawLabels)
         {
-            this.drawLabels = drawLabels;
+            this.drawAreaNames = drawLabels;
+
+            this.Refresh();
+        }
+
+        public void SetDrawGroups(bool drawGroups)
+        {
+            this.drawGroupNames = drawGroups;
 
             this.Refresh();
         }
@@ -103,7 +111,7 @@
 
                 int direction = 1;
 
-                var areaRect = Config.GetBounds(areas);
+                var areaRect = Config.GetBounds(areas, log: false);
 
                 int areaWidth = areaRect.Width;
                 int areaHeight = areaRect.Height;
@@ -154,6 +162,7 @@
             this.areas = areas
                 .OrderBy(a => a.Z)
                 .ToArray();
+
             this.bounds = Config.GetBounds(areas);
 
             this.Refresh();
@@ -173,14 +182,26 @@
             {
                 Graphics g = e.Graphics;
 
-                this.DrawArea(g, area);
+                bool drawn = this.DrawArea(g, area);
+
+                if(!drawn)
+                {
+                    // THE FUCK!!
+                }
             }
 
             this.ResumeLayout();
         }
 
-        private void DrawArea(Graphics g, Area area)
+        private bool DrawArea(Graphics g, Area area)
         {
+            if (!File.Exists(area.File))
+            {
+                Logging.Log($"File: {area.File} does not exist");
+
+                return false;
+            }
+
             Rectangle areaRect = GetAreaRectangle(area);
 
             int x = areaRect.X;
@@ -232,16 +253,32 @@
                 g.DrawRectangle(pen, rect);
             }
 
-            if (this.drawLabels)
+            var font = new Font("Consolas", 15);
+
+            Brush brush = (area.Locked == true)
+                ? Brushes.LightGray
+                : Brushes.Yellow;
+
+            if (this.drawAreaNames)
             {
-                var font = new Font("Consolas", 15);
-
-                Brush brush = (area.Locked == true)
-                    ? Brushes.LightGray
-                    : Brushes.Yellow;
-
                 g.DrawString(area.Name, font, brush, new Point(x + 5, y + 5));
+
+                if (this.drawGroupNames)
+                {
+                    NestedDrawGroupNames($"{area.Group}", new Point(x + 5, y + 20));
+                }
             }
+            else if (this.drawGroupNames)
+            {
+                NestedDrawGroupNames($"{area.Group}", new Point(x + 5, y + 20));
+            }
+
+            void NestedDrawGroupNames(string name, Point position)
+            {
+                g.DrawString(name, font, brush, position);
+            }
+
+            return true;
         }
 
         private Rectangle GetAreaRectangle(Area area)

@@ -116,8 +116,6 @@
                     {
                         SaveConfiguration(frm, example, fs, sfd.FileName);
                     }
-
-                    frm.SetStatus("Example configuration saved");
                 }
                 else
                 {

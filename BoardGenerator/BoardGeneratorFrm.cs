@@ -300,11 +300,11 @@ namespace BoardGenerator
 
         private void LabelsMenuItem_Click(object sender, EventArgs e)
         {
-            this.labelsToolStripMenuItem.Checked =
-                !this.labelsToolStripMenuItem.Checked;
+            this.areaNamesToolStripMenuItem.Checked =
+                !this.areaNamesToolStripMenuItem.Checked;
 
             this.boardEditor.SetDrawLabels(
-                this.labelsToolStripMenuItem.Checked);
+                this.areaNamesToolStripMenuItem.Checked);
         }
 
         private void OpenLogMenuItem_Click(object sender, EventArgs e)
@@ -318,6 +318,15 @@ namespace BoardGenerator
 
             logFrm.Show();
             logFrm.BringToFront();
+        }
+
+        private void GroupNamesMenuItem_Click(object sender, EventArgs e)
+        {
+            this.groupNamesToolStripMenuItem.Checked =
+                !this.groupNamesToolStripMenuItem.Checked;
+
+            this.boardEditor.SetDrawLabels(
+                this.groupNamesToolStripMenuItem.Checked);
         }
     }
 }
