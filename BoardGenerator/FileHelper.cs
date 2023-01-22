@@ -1,11 +1,12 @@
 ﻿namespace BoardGenerator
 {
-    using System.Text;
-
     internal static class FileHelper
     {
         public static bool IsFileInUse(string filePath)
         {
+            _ = filePath ??
+                throw new ArgumentNullException(nameof(filePath));
+
             var file = new FileInfo(filePath);
 
             try
@@ -46,22 +47,15 @@
             return fileContent;
         }
 
-        public static void WriteToStream(
-            FileStream fileStream, string content)
+        public static void SaveFile(string filePath, string content)
         {
-            _ = fileStream ??
-                throw new ArgumentNullException(nameof(fileStream));
+            _ = filePath ??
+                throw new ArgumentNullException(nameof(filePath));
 
             _ = content ??
                 throw new ArgumentNullException(nameof(content));
 
-
-            byte[] bytes = Encoding.UTF8.GetBytes(content);
-
-            fileStream.Write(bytes, 0, bytes.Length);
-
-            Logging.LogLine(
-                $"Written {content.Length} characters to file stream");
+            File.WriteAllText(filePath, content);
         }
 
         public static string GetBasePath(string basePath)
@@ -110,6 +104,12 @@
 
         public static Image GetImage(ImageCache cache, string path)
         {
+            _ = cache ??
+                throw new ArgumentNullException(nameof(cache));
+
+            _ = path ??
+                throw new ArgumentNullException(nameof(path));
+
             Image result = cache.Get(path);
 
             if (result == null)

@@ -1,4 +1,5 @@
 using BoardGenerator.Conf;
+using System.Drawing.Imaging;
 
 namespace BoardGenerator
 {
@@ -214,11 +215,7 @@ namespace BoardGenerator
                 return;
             }
 
-            using (var fs = new FileStream(filePath,
-                FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-            {
-                MenuHelper.SaveConfiguration(this, this.configuration, fs, filePath);
-            }
+            MenuHelper.SaveConfiguration(this, this.configuration, filePath);
         }
 
         private void SaveAsMenuItem_Click(object sender, EventArgs e)
@@ -243,11 +240,8 @@ namespace BoardGenerator
                 {
                     if (sfd.FileName != "")
                     {
-                        using (var fs = (System.IO.FileStream)sfd.OpenFile())
-                        {
-                            MenuHelper.SaveConfiguration(this,
-                                this.configuration, fs, sfd.FileName);
-                        }
+                        MenuHelper.SaveConfiguration(this,
+                            this.configuration, sfd.FileName);
                     }
                     else
                     {
@@ -382,6 +376,46 @@ namespace BoardGenerator
             this.boardEditor.TextColor = textColor;
 
             this.boardEditor.Refresh();
+
+            this.SetStatus($"Set Overlay {color}");
+        }
+
+        private void ExportMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Bitmap bitmap = this.boardEditor.Export();
+
+                using (var fsd = FileHelper.ShowSaveFileDialog("Export Board", "PNG|*.png"))
+                {
+                    if (fsd != null)
+                    {
+                        if (fsd.FileName != "")
+                        {
+                            var imageEncoders = ImageCodecInfo.GetImageEncoders();
+                            var encoderParameters = new EncoderParameters(1);
+                            encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 100L);
+
+                            bitmap.Save(fsd.FileName, imageEncoders[4], encoderParameters);
+
+                            this.SetStatus($"The board was exported to: {fsd.FileName}");
+                        }
+                        else
+                        {
+                            this.SetStatus("Exporing the board was cancelled");
+                        }
+                    }
+                    else
+                    {
+                        this.SetStatus("Exporing the board was cancelled");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.SetError("An error occurred while exporting the board");
+                Logging.Log($"{ex}");
+            }
         }
     }
 }

@@ -112,10 +112,7 @@
             {
                 if (sfd.FileName != "")
                 {
-                    using (var fs = (FileStream)sfd.OpenFile())
-                    {
-                        SaveConfiguration(frm, example, fs, sfd.FileName);
-                    }
+                    SaveConfiguration(frm, example, sfd.FileName);
                 }
                 else
                 {
@@ -125,7 +122,7 @@
         }
 
         public static void SaveConfiguration(BoardGeneratorFrm frm,
-            Configuration config, FileStream fs, string filePath)
+            Configuration config, string filePath)
         {
             if (config == null)
             {
@@ -138,9 +135,7 @@
             {
                 string json = frm.Config.Serialize(config);
 
-                FileHelper.WriteToStream(fs, json);
-
-                fs.Close();
+                FileHelper.SaveFile(filePath, json);
 
                 frm.SetStatus($"Configuration saved to: {filePath}");
             }

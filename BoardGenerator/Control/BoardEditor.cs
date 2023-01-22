@@ -1,6 +1,8 @@
 ﻿namespace BoardGenerator.Control
 {
     using BoardGenerator.Conf;
+    using System.Drawing.Drawing2D;
+    using System.Drawing.Imaging;
     using System.Windows.Forms;
 
     public partial class BoardEditor : UserControl
@@ -205,7 +207,7 @@
             {
                 Graphics g = e.Graphics;
 
-                bool drawn = this.DrawArea(g, area);
+                bool drawn = this.DrawArea(g, area, export: false);
 
                 if (!drawn)
                 {
@@ -216,7 +218,7 @@
             this.ResumeLayout(false);
         }
 
-        private bool DrawArea(Graphics g, Area area)
+        private bool DrawArea(Graphics g, Area area, bool export, bool overlay = true)
         {
             if (!File.Exists(area.File))
             {
@@ -225,7 +227,9 @@
                 return false;
             }
 
-            Rectangle areaRect = GetAreaRectangle(area);
+            Rectangle areaRect = export
+                ? new Rectangle(area.X, area.Y, area.Width, area.Height)
+                : GetAreaRectangle(area);
 
             int x = areaRect.X;
             int y = areaRect.Y;
@@ -236,7 +240,7 @@
 
             var areaSize = new Size(width, height);
 
-            if (!this.mouseDown && !string.IsNullOrWhiteSpace(area.File))
+            if ((export || !this.mouseDown) && !string.IsNullOrWhiteSpace(area.File))
             {
                 if (!File.Exists(area.File))
                 {
@@ -245,7 +249,7 @@
 
                 var img = FileHelper.GetImage(this.Cache, area.File);
 
-                float scale = this.ScaleFactor;
+                float scale = export ? 1 : this.ScaleFactor;
 
                 int scaledImgWidth = (int)(img.Width * scale);
                 int scaledImgHeight = (int)(img.Height * scale);
@@ -253,7 +257,12 @@
                 g.DrawImage(img, x, y, scaledImgWidth, scaledImgHeight);
             }
 
-            if (this.drawBorders)
+            if (!overlay)
+            {
+                return true;
+            }
+
+            if (this.drawBorders || this.mouseDown)
             {
                 int halfWidth = BORDER_WIDTH / 2;
 
@@ -439,6 +448,33 @@
         private void BoardEditor_KeyUp(object sender, KeyEventArgs e)
         {
             this.ctrlDown = e.Control;
+        }
+
+        public Bitmap Export()
+        {
+            int width = this.bounds.Width;
+            int height = this.bounds.Height;
+
+            var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+
+            var g = Graphics.FromImage(bitmap);
+
+            g.SmoothingMode = SmoothingMode.HighQuality;
+            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+            g.CompositingQuality = CompositingQuality.HighQuality;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+            foreach (Area area in this.areas)
+            {
+                bool drawn = this.DrawArea(g, area, export: true, overlay: false);
+
+                if (!drawn)
+                {
+                    // THE FUCK!!
+                }
+            }
+
+            return bitmap;
         }
     }
 }

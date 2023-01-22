@@ -59,6 +59,9 @@
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -190,8 +193,11 @@
             // 
             this.boardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generateToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.unlockAllAreasToolStripMenuItem,
             this.lockAllAreasToolStripMenuItem,
-            this.unlockAllAreasToolStripMenuItem});
+            this.toolStripMenuItem3,
+            this.exportToolStripMenuItem});
             this.boardToolStripMenuItem.Name = "boardToolStripMenuItem";
             this.boardToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.boardToolStripMenuItem.Text = "&Board";
@@ -333,6 +339,7 @@
             // 
             this.boardEditor.BackColor = System.Drawing.Color.Gray;
             this.boardEditor.BorderColor = System.Drawing.Color.Yellow;
+            this.boardEditor.Cache = null;
             this.boardEditor.CtrlShortcut = null;
             this.boardEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.boardEditor.Dragged = null;
@@ -342,6 +349,23 @@
             this.boardEditor.TabIndex = 2;
             this.boardEditor.Zoom = 0;
             this.boardEditor.ZoomChanged = null;
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportMenuItem_Click);
             // 
             // BoardGeneratorFrm
             // 
@@ -397,5 +421,8 @@
         private ToolStripMenuItem redToolStripMenuItem;
         private ToolStripMenuItem blueToolStripMenuItem;
         private ToolStripMenuItem blackToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem2;
+        private ToolStripSeparator toolStripMenuItem3;
+        private ToolStripMenuItem exportToolStripMenuItem;
     }
 }
