@@ -139,8 +139,15 @@
                     areaWidth = (int)(areaRect.Width * scaleFactor);
                     areaHeight = (int)(areaRect.Height * scaleFactor);
 
-                    if (!Fits(areaWidth, areaHeight))
+                    bool fits = Fits(areaWidth, areaHeight);
+
+                    if (((direction == 1) && !fits) || fits)
                     {
+                        if(direction == -1)
+                        {
+                            this.Zoom = zoom;
+                        }
+
                         this.ZoomChanged?.Invoke();
 
                         break;
