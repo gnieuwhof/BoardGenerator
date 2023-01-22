@@ -33,6 +33,8 @@
 
         public int Zoom { get; set; }
 
+        public ImageCache Cache { get; set; }
+
         public Color BorderColor { get; set; } = Color.Yellow;
         public Brush TextColor { get; set; } = Brushes.Yellow;
 
@@ -241,17 +243,14 @@
                     Logging.Log($"File {area.File} for area {area.Name} does not exist");
                 }
 
-                if (area.Img == null)
-                {
-                    area.SetImage(area.File, Image.FromFile(area.File));
-                }
+                var img = FileHelper.GetImage(this.Cache, area.File);
 
                 float scale = this.ScaleFactor;
 
-                int scaledImgWidth = (int)(area.Img.Width * scale);
-                int scaledImgHeight = (int)(area.Img.Height * scale);
+                int scaledImgWidth = (int)(img.Width * scale);
+                int scaledImgHeight = (int)(img.Height * scale);
 
-                g.DrawImage(area.Img, x, y, scaledImgWidth, scaledImgHeight);
+                g.DrawImage(img, x, y, scaledImgWidth, scaledImgHeight);
             }
 
             if (this.drawBorders)

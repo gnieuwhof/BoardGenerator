@@ -108,5 +108,18 @@
             return saveFileDialog;
         }
 
+        public static Image GetImage(ImageCache cache, string path)
+        {
+            Image result = cache.Get(path);
+
+            if (result == null)
+            {
+                result = Image.FromFile(path);
+
+                cache.AddOrUpdate(result, path);
+            }
+
+            return result;
+        }
     }
 }

@@ -171,6 +171,8 @@ namespace BoardGenerator
                 return;
             }
 
+            this.boardEditor.Cache = new ImageCache(config.CacheSize);
+
             this.boardEditor.SetConfiguration(config.Areas, resetPosition);
         }
 
