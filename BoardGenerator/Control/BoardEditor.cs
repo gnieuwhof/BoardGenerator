@@ -61,6 +61,8 @@
         public Action ZoomChanged { get; set; }
         public Action<Keys> CtrlShortcut { get; set; }
 
+        public string BasePath { get; set; }
+
 
         public void SetDrawBorders(bool drawBorders)
         {
@@ -218,11 +220,24 @@
             this.ResumeLayout(false);
         }
 
+
+        private string GetPath(string file)
+        {
+            if (file.Contains(':'))
+            {
+                return file;
+            }
+
+            return Path.Combine(this.BasePath, file);
+        }
+
         private bool DrawArea(Graphics g, Area area, bool export, bool overlay = true)
         {
-            if (!File.Exists(area.File))
+            string file = this.GetPath(area.File);
+
+            if (!File.Exists(file))
             {
-                Logging.Log($"File: {area.File} does not exist");
+                Logging.Log($"File: {file} does not exist");
 
                 return false;
             }
@@ -240,14 +255,9 @@
 
             var areaSize = new Size(width, height);
 
-            if ((export || !this.mouseDown) && !string.IsNullOrWhiteSpace(area.File))
+            if (export || !this.mouseDown)
             {
-                if (!File.Exists(area.File))
-                {
-                    Logging.Log($"File {area.File} for area {area.Name} does not exist");
-                }
-
-                var img = FileHelper.GetImage(this.Cache, area.File);
+                var img = FileHelper.GetImage(this.Cache, file);
 
                 float scale = export ? 1 : this.ScaleFactor;
 

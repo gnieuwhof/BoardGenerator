@@ -30,6 +30,11 @@
 
                         result = InnerLoadConfig(frm, fileStream, filePath);
 
+                        if (result.BasePath == null)
+                        {
+                            result.BasePath = Path.GetDirectoryName(filePath);
+                        }
+
                         frm.ConfigFilePath = filePath;
 
                         frm.Config.WatchFile(filePath);

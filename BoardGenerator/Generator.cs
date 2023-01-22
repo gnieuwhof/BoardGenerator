@@ -20,7 +20,7 @@
             Logging.Log("Regenerating board");
             Logging.Log();
 
-            string basePath = FileHelper.GetBasePath(config.BasePath);
+            string basePath = config.BasePath;
 
             Logging.Log("Getting Area paths");
             Logging.Log($"Base path: {basePath}");
@@ -79,6 +79,8 @@
                     area.File = imageFile;
                 }
             }
+
+            frm.SetStatus("Board generated");
         }
 
         private static Dictionary<Area, string> GetAreaFolders(

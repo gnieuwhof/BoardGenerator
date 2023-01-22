@@ -85,6 +85,8 @@ namespace BoardGenerator
         {
             this.configuration = MenuHelper.LoadConfiguration(this);
 
+            this.boardEditor.BasePath = this.configuration.BasePath;
+
             this.SetConfiguration(this.configuration, resetPosition: true);
         }
 
@@ -267,8 +269,6 @@ namespace BoardGenerator
             Generator.Generate(this, this.configuration);
 
             this.boardEditor.Refresh();
-
-            this.SetStatus("Board generated");
         }
 
         private void LockAllAreasMenuItem_Click(object sender, EventArgs e)
@@ -321,7 +321,7 @@ namespace BoardGenerator
             this.groupNamesToolStripMenuItem.Checked =
                 !this.groupNamesToolStripMenuItem.Checked;
 
-            this.boardEditor.SetDrawLabels(
+            this.boardEditor.SetDrawGroups(
                 this.groupNamesToolStripMenuItem.Checked);
         }
 

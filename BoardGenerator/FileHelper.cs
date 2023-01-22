@@ -58,16 +58,6 @@
             File.WriteAllText(filePath, content);
         }
 
-        public static string GetBasePath(string basePath)
-        {
-            if (basePath == null)
-            {
-                basePath = Path.GetDirectoryName(Application.ExecutablePath);
-            }
-
-            return basePath;
-        }
-
         public static OpenFileDialog ShowOpenFileDialog(
             string title, string filter, bool restoreDirectory = true)
         {
