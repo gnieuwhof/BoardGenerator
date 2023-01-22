@@ -37,6 +37,8 @@
 
             this.AddItem(lockedLabel, this.ToggleLocked);
 
+            this.AddItem("Toggle locked (CTRL + left mouse)", this.ToggleLocked);
+
             if (!string.IsNullOrWhiteSpace(this.area.Group))
             {
                 var groupAreas = this.allAreas

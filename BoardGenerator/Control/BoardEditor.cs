@@ -184,7 +184,7 @@
 
                 bool drawn = this.DrawArea(g, area);
 
-                if(!drawn)
+                if (!drawn)
                 {
                     // THE FUCK!!
                 }
@@ -305,12 +305,12 @@
 
         private void BoardEditor_MouseDown(object sender, MouseEventArgs e)
         {
+            var position = new Point(e.X, e.Y);
+
+            Area area = GetArea(position);
+
             if (e.Button == MouseButtons.Right)
             {
-                var position = new Point(e.X, e.Y);
-
-                Area area = GetArea(position);
-
                 if (area != null)
                 {
                     var ctxMenu = new ContextMenu(this, area, this.areas);
@@ -319,6 +319,12 @@
                 }
 
                 return;
+            }
+            else if (this.ctrlDown && (area != null))
+            {
+                area.Locked = (area.Locked == true) ? null : true;
+
+                this.Refresh();
             }
 
             this.mouseDown = true;
