@@ -280,26 +280,52 @@
                 ? Brushes.LightGray
                 : this.TextColor;
 
+            Brush backColor = BackColorBrush(brush);
+
             if (this.drawAreaNames)
             {
-                g.DrawString(area.Name, font, brush, new Point(x + 5, y + 5));
+                this.DrawText(g, new Point(x + 5, y + 5),
+                    area.Name, font, brush, backColor);
 
                 if (this.drawGroupNames)
                 {
-                    NestedDrawGroupNames($"{area.Group}", new Point(x + 5, y + 20));
+                    NestedDrawGroupNames($"{area.Group}", new Point(x + 5, y + 25));
                 }
             }
             else if (this.drawGroupNames)
             {
-                NestedDrawGroupNames($"{area.Group}", new Point(x + 5, y + 20));
+                NestedDrawGroupNames($"{area.Group}", new Point(x + 5, y + 25));
             }
 
             void NestedDrawGroupNames(string name, Point position)
             {
-                g.DrawString(name, font, brush, position);
+                this.DrawText(g, position, name, font, brush, backColor);
             }
 
             return true;
+        }
+
+        private static Brush BackColorBrush(Brush brush)
+        {
+            if (brush == Brushes.Black)
+                return Brushes.White;
+
+            if (brush == Brushes.Blue)
+                return Brushes.White;
+
+            return Brushes.Black;
+        }
+
+        private void DrawText(Graphics g, Point point, string text,
+            Font font, Brush textColor, Brush backColor)
+        {
+            Size sizeOfText = TextRenderer.MeasureText(text, font);
+
+            var rect = new Rectangle(point, sizeOfText);
+
+            g.FillRectangle(backColor, rect);
+
+            g.DrawString(text, font, textColor, point);
         }
 
         private Rectangle GetAreaRectangle(Area area)
