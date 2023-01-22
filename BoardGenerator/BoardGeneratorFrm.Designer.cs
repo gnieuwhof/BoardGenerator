@@ -50,6 +50,12 @@
             this.areaNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.whiteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yellowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
@@ -219,7 +225,13 @@
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.areaNamesToolStripMenuItem,
             this.bordersToolStripMenuItem,
-            this.groupNamesToolStripMenuItem});
+            this.groupNamesToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.whiteToolStripMenuItem,
+            this.yellowToolStripMenuItem,
+            this.redToolStripMenuItem,
+            this.blueToolStripMenuItem,
+            this.blackToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
@@ -255,6 +267,53 @@
             this.groupNamesToolStripMenuItem.Text = "Gro&up Names";
             this.groupNamesToolStripMenuItem.Click += new System.EventHandler(this.GroupNamesMenuItem_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(186, 6);
+            // 
+            // whiteToolStripMenuItem
+            // 
+            this.whiteToolStripMenuItem.Name = "whiteToolStripMenuItem";
+            this.whiteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.whiteToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.whiteToolStripMenuItem.Text = "&White";
+            this.whiteToolStripMenuItem.Click += new System.EventHandler(this.WhiteMenuItem_Click);
+            // 
+            // yellowToolStripMenuItem
+            // 
+            this.yellowToolStripMenuItem.Checked = true;
+            this.yellowToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.yellowToolStripMenuItem.Name = "yellowToolStripMenuItem";
+            this.yellowToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.yellowToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.yellowToolStripMenuItem.Text = "&Yellow";
+            this.yellowToolStripMenuItem.Click += new System.EventHandler(this.YellowMenuItem_Click);
+            // 
+            // redToolStripMenuItem
+            // 
+            this.redToolStripMenuItem.Name = "redToolStripMenuItem";
+            this.redToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.redToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.redToolStripMenuItem.Text = "&Red";
+            this.redToolStripMenuItem.Click += new System.EventHandler(this.RedMenuItem_Click);
+            // 
+            // blueToolStripMenuItem
+            // 
+            this.blueToolStripMenuItem.Name = "blueToolStripMenuItem";
+            this.blueToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.blueToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.blueToolStripMenuItem.Text = "Blu&e";
+            this.blueToolStripMenuItem.Click += new System.EventHandler(this.BlueMenuItem_Click);
+            // 
+            // blackToolStripMenuItem
+            // 
+            this.blackToolStripMenuItem.Name = "blackToolStripMenuItem";
+            this.blackToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.K)));
+            this.blackToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.blackToolStripMenuItem.Text = "Blac&k";
+            this.blackToolStripMenuItem.Click += new System.EventHandler(this.BlackMenuItem_Click);
+            // 
             // windowToolStripMenuItem
             // 
             this.windowToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -273,6 +332,7 @@
             // boardEditor
             // 
             this.boardEditor.BackColor = System.Drawing.Color.Gray;
+            this.boardEditor.BorderColor = System.Drawing.Color.Yellow;
             this.boardEditor.CtrlShortcut = null;
             this.boardEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.boardEditor.Dragged = null;
@@ -331,5 +391,11 @@
         private ToolStripMenuItem saveToolStripMenuItem;
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private ToolStripMenuItem groupNamesToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem whiteToolStripMenuItem;
+        private ToolStripMenuItem yellowToolStripMenuItem;
+        private ToolStripMenuItem redToolStripMenuItem;
+        private ToolStripMenuItem blueToolStripMenuItem;
+        private ToolStripMenuItem blackToolStripMenuItem;
     }
 }

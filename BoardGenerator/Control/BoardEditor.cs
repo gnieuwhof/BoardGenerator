@@ -33,6 +33,9 @@
 
         public int Zoom { get; set; }
 
+        public Color BorderColor { get; set; } = Color.Yellow;
+        public Brush TextColor { get; set; } = Brushes.Yellow;
+
         public float ScaleFactor => GetScaleFactor(this.Zoom);
 
         private static float GetScaleFactor(int zoom)
@@ -141,9 +144,10 @@
 
                     bool fits = Fits(areaWidth, areaHeight);
 
-                    if (((direction == 1) && !fits) || fits)
+                    if (((direction == 1) && !fits) ||
+                        ((direction == -1) && fits))
                     {
-                        if(direction == -1)
+                        if (direction == -1)
                         {
                             this.Zoom = zoom;
                         }
@@ -175,6 +179,16 @@
             this.Refresh();
         }
 
+        // Prevent flickering (ish).
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle = cp.ExStyle | 0x2000000;
+                return cp;
+            }
+        }
 
         private void BoardEditor_Paint(object sender, PaintEventArgs e)
         {
@@ -197,7 +211,7 @@
                 }
             }
 
-            this.ResumeLayout();
+            this.ResumeLayout(false);
         }
 
         private bool DrawArea(Graphics g, Area area)
@@ -251,7 +265,7 @@
 
                 Color color = (area.Locked == true)
                     ? Color.LightGray
-                    : Color.Yellow;
+                    : this.BorderColor;
 
                 var pen = new Pen(color, BORDER_WIDTH);
 
@@ -264,7 +278,7 @@
 
             Brush brush = (area.Locked == true)
                 ? Brushes.LightGray
-                : Brushes.Yellow;
+                : this.TextColor;
 
             if (this.drawAreaNames)
             {

@@ -328,5 +328,58 @@ namespace BoardGenerator
             this.boardEditor.SetDrawLabels(
                 this.groupNamesToolStripMenuItem.Checked);
         }
+
+
+        private void WhiteMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SetOverlayColor(Color.White);
+        }
+
+        private void YellowMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SetOverlayColor(Color.Yellow);
+        }
+
+        private void RedMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SetOverlayColor(Color.Red);
+        }
+
+        private void BlueMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SetOverlayColor(Color.Blue);
+        }
+
+        private void BlackMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SetOverlayColor(Color.Black);
+        }
+
+        private void SetOverlayColor(Color color)
+        {
+            this.whiteToolStripMenuItem.Checked = (color == Color.White);
+            this.yellowToolStripMenuItem.Checked = (color == Color.Yellow);
+            this.redToolStripMenuItem.Checked = (color == Color.Red);
+            this.blueToolStripMenuItem.Checked = (color == Color.Blue);
+            this.blackToolStripMenuItem.Checked = (color == Color.Black);
+
+            Brush textColor = null;
+
+            if (color == Color.White)
+                textColor = Brushes.White;
+            if (color == Color.Yellow)
+                textColor = Brushes.Yellow;
+            if (color == Color.Red)
+                textColor = Brushes.Red;
+            if (color == Color.Blue)
+                textColor = Brushes.Blue;
+            if (color == Color.Black)
+                textColor = Brushes.Black;
+
+            this.boardEditor.BorderColor = color;
+            this.boardEditor.TextColor = textColor;
+
+            this.boardEditor.Refresh();
+        }
     }
 }
