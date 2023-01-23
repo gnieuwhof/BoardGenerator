@@ -44,8 +44,11 @@
             this.createExampleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lockAllAreasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.unlockAllAreasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lockAllAreasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.areaNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bordersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,9 +62,6 @@
             this.windowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.boardEditor = new BoardGenerator.Control.BoardEditor();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -210,13 +210,10 @@
             this.generateToolStripMenuItem.Text = "&Generate";
             this.generateToolStripMenuItem.Click += new System.EventHandler(this.GenerateMenuItem_Click);
             // 
-            // lockAllAreasToolStripMenuItem
+            // toolStripMenuItem2
             // 
-            this.lockAllAreasToolStripMenuItem.Name = "lockAllAreasToolStripMenuItem";
-            this.lockAllAreasToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
-            this.lockAllAreasToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.lockAllAreasToolStripMenuItem.Text = "&Lock All Areas";
-            this.lockAllAreasToolStripMenuItem.Click += new System.EventHandler(this.LockAllAreasMenuItem_Click);
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
             // 
             // unlockAllAreasToolStripMenuItem
             // 
@@ -225,6 +222,26 @@
             this.unlockAllAreasToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.unlockAllAreasToolStripMenuItem.Text = "&Unlock All Areas";
             this.unlockAllAreasToolStripMenuItem.Click += new System.EventHandler(this.UnlockAllAreasMenuItem_Click);
+            // 
+            // lockAllAreasToolStripMenuItem
+            // 
+            this.lockAllAreasToolStripMenuItem.Name = "lockAllAreasToolStripMenuItem";
+            this.lockAllAreasToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.lockAllAreasToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.lockAllAreasToolStripMenuItem.Text = "&Lock All Areas";
+            this.lockAllAreasToolStripMenuItem.Click += new System.EventHandler(this.LockAllAreasMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -338,6 +355,7 @@
             // boardEditor
             // 
             this.boardEditor.BackColor = System.Drawing.Color.Gray;
+            this.boardEditor.BasePath = null;
             this.boardEditor.BorderColor = System.Drawing.Color.Yellow;
             this.boardEditor.Cache = null;
             this.boardEditor.CtrlShortcut = null;
@@ -350,23 +368,6 @@
             this.boardEditor.Zoom = 0;
             this.boardEditor.ZoomChanged = null;
             // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(199, 6);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(199, 6);
-            // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.exportToolStripMenuItem.Text = "Export";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportMenuItem_Click);
-            // 
             // BoardGeneratorFrm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -377,7 +378,7 @@
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Name = "BoardGeneratorFrm";
-            this.Text = "Board Generator";
+            this.Text = "Board Generator Tool v1.0a";
             this.Load += new System.EventHandler(this.BoardGeneratorFrm_Load);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
