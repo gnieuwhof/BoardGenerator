@@ -235,10 +235,9 @@
         {
             bool result = true;
 
-            string file = this.GetPath(area.File);
-
             Rectangle areaRect = export
-                ? new Rectangle(area.X, area.Y, area.Width, area.Height)
+                ? new Rectangle(area.X - this.bounds.Left,
+                    area.Y - this.bounds.Top, area.Width, area.Height)
                 : GetAreaRectangle(area);
 
             int x = areaRect.X;
@@ -246,29 +245,34 @@
             int width = areaRect.Width;
             int height = areaRect.Height;
 
-            if (File.Exists(file))
+            if (area.File != null)
             {
-                var areaPosition = new Point(x, y);
+                string file = this.GetPath(area.File);
 
-                var areaSize = new Size(width, height);
-
-                if (export || !this.mouseDown)
+                if (File.Exists(file))
                 {
-                    var img = FileHelper.GetImage(this.Cache, file);
+                    var areaPosition = new Point(x, y);
 
-                    float scale = export ? 1 : this.ScaleFactor;
+                    var areaSize = new Size(width, height);
 
-                    int scaledImgWidth = (int)(img.Width * scale);
-                    int scaledImgHeight = (int)(img.Height * scale);
+                    if (export || !this.mouseDown)
+                    {
+                        var img = FileHelper.GetImage(this.Cache, file);
 
-                    g.DrawImage(img, x, y, scaledImgWidth, scaledImgHeight);
+                        float scale = export ? 1 : this.ScaleFactor;
+
+                        int scaledImgWidth = (int)(img.Width * scale);
+                        int scaledImgHeight = (int)(img.Height * scale);
+
+                        g.DrawImage(img, x, y, scaledImgWidth, scaledImgHeight);
+                    }
                 }
-            }
-            else
-            {
-                Logging.Log($"File: {file} does not exist");
+                else
+                {
+                    Logging.Log($"File: {file} does not exist");
 
-                result = false;
+                    result = false;
+                }
             }
 
             if (!overlay)
