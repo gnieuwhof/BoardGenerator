@@ -28,6 +28,15 @@ namespace BoardGenerator
 
         public string ConfigFilePath { get; set; }
 
+        public string BasePath
+        {
+            get => this.boardEditor.BasePath;
+            set
+            {
+                this.boardEditor.BasePath = value;
+            }
+        }
+
 
         private void BoardGeneratorFrm_Load(object sender, EventArgs e)
         {
@@ -84,8 +93,6 @@ namespace BoardGenerator
         private void LoadConfigurationMenuItem_Click(object sender, EventArgs e)
         {
             this.configuration = MenuHelper.LoadConfiguration(this);
-
-            this.boardEditor.BasePath = this.configuration.BasePath;
 
             this.SetConfiguration(this.configuration, resetPosition: true);
         }

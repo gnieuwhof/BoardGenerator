@@ -120,7 +120,9 @@
 
                 if (filePath != "")
                 {
-                    this.area.File = filePath;
+                    string imageFile = Generator.GetFilePath(filePath, this.brd.BasePath);
+
+                    this.area.File = imageFile;
                     this.area.Locked = true;
 
                     this.brd.Refresh();

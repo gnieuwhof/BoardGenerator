@@ -20,7 +20,7 @@
             Logging.Log("Regenerating board");
             Logging.Log();
 
-            string basePath = config.BasePath;
+            string basePath = frm.BasePath;
 
             Logging.Log("Getting Area paths");
             Logging.Log($"Base path: {basePath}");
@@ -76,11 +76,30 @@
                         excludeList.Add(imageFile);
                     }
 
+                    imageFile = GetFilePath(imageFile, frm.BasePath);
+
                     area.File = imageFile;
                 }
             }
 
             frm.SetStatus("Board generated");
+        }
+
+        public static string GetFilePath(string imageFile, string basePath)
+        {
+            if (imageFile.StartsWith(basePath))
+            {
+                int length = basePath.Length;
+
+                if (!basePath.EndsWith('\\') && !basePath.EndsWith('/'))
+                {
+                    ++length;
+                }
+
+                imageFile = imageFile.Substring(length);
+            }
+
+            return imageFile;
         }
 
         private static Dictionary<Area, string> GetAreaFolders(

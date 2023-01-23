@@ -30,10 +30,11 @@
 
                         result = InnerLoadConfig(frm, fileStream, filePath);
 
-                        if (result.BasePath == null)
-                        {
-                            result.BasePath = Path.GetDirectoryName(filePath);
-                        }
+                        string basePath = string.IsNullOrWhiteSpace(result.BasePath)
+                            ? Path.GetDirectoryName(filePath)
+                            : result.BasePath;
+
+                        frm.BasePath = basePath;
 
                         frm.ConfigFilePath = filePath;
 

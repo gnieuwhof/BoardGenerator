@@ -223,24 +223,19 @@
 
         private string GetPath(string file)
         {
-            if (file.Contains(':'))
+            if (!file.Contains(':'))
             {
-                return file;
+                file = Path.Combine(this.BasePath, file);
             }
 
-            return Path.Combine(this.BasePath, file);
+            return file;
         }
 
         private bool DrawArea(Graphics g, Area area, bool export, bool overlay = true)
         {
+            bool result = true;
+
             string file = this.GetPath(area.File);
-
-            if (!File.Exists(file))
-            {
-                Logging.Log($"File: {file} does not exist");
-
-                return false;
-            }
 
             Rectangle areaRect = export
                 ? new Rectangle(area.X, area.Y, area.Width, area.Height)
@@ -251,28 +246,37 @@
             int width = areaRect.Width;
             int height = areaRect.Height;
 
-            var areaPosition = new Point(x, y);
-
-            var areaSize = new Size(width, height);
-
-            if (export || !this.mouseDown)
+            if (File.Exists(file))
             {
-                var img = FileHelper.GetImage(this.Cache, file);
+                var areaPosition = new Point(x, y);
 
-                float scale = export ? 1 : this.ScaleFactor;
+                var areaSize = new Size(width, height);
 
-                int scaledImgWidth = (int)(img.Width * scale);
-                int scaledImgHeight = (int)(img.Height * scale);
+                if (export || !this.mouseDown)
+                {
+                    var img = FileHelper.GetImage(this.Cache, file);
 
-                g.DrawImage(img, x, y, scaledImgWidth, scaledImgHeight);
+                    float scale = export ? 1 : this.ScaleFactor;
+
+                    int scaledImgWidth = (int)(img.Width * scale);
+                    int scaledImgHeight = (int)(img.Height * scale);
+
+                    g.DrawImage(img, x, y, scaledImgWidth, scaledImgHeight);
+                }
+            }
+            else
+            {
+                Logging.Log($"File: {file} does not exist");
+
+                result = false;
             }
 
             if (!overlay)
             {
-                return true;
+                return result;
             }
 
-            if (this.drawBorders || this.mouseDown)
+            if (this.drawBorders || this.mouseDown || (area.Locked == true))
             {
                 int halfWidth = BORDER_WIDTH / 2;
 
@@ -320,7 +324,7 @@
                 this.DrawText(g, position, name, font, brush, backColor);
             }
 
-            return true;
+            return result;
         }
 
         private static Brush BackColorBrush(Brush brush)
@@ -399,7 +403,7 @@
 
         private Area GetArea(Point position)
         {
-            foreach (Area area in this.areas)
+            foreach (Area area in this.areas.Reverse())
             {
                 Rectangle rect = GetAreaRectangle(area);
 
