@@ -245,7 +245,21 @@
             int width = areaRect.Width;
             int height = areaRect.Height;
 
-            if (area.File != null)
+            bool positiveSize = true;
+
+            if (width <= 0)
+            {
+                Logging.LogLine($"Width of area {area.Name} must be greater than 0");
+                positiveSize = false;
+            }
+
+            if (height <= 0)
+            {
+                Logging.LogLine($"Height of area {area.Name} must be greater than 0");
+                positiveSize = false;
+            }
+
+            if (positiveSize && (area.File != null))
             {
                 string file = this.GetPath(area.File);
 
@@ -280,7 +294,7 @@
                 return result;
             }
 
-            if (this.drawBorders || this.mouseDown || (area.Locked == true))
+            if (positiveSize && (this.drawBorders || this.mouseDown || (area.Locked == true)))
             {
                 int halfWidth = BORDER_WIDTH / 2;
 
